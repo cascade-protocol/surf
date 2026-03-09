@@ -5,18 +5,26 @@ description: "Web crawling and search via Surf's paid API: crawl URLs ($0.005) a
 
 # Surf Web
 
-Web crawling and search API at `https://web.surf.cascade.fyi`. Uses x402 for USDC micropayments on Solana.
+Web crawling and search API at `https://web.surf.cascade.fyi`. USDC micropayments via x402 on Solana.
 
 ## Setup
 
 ```bash
-npm install @x402/fetch
+npm install @x402/fetch @x402/svm @solana/kit
 ```
 
 ```typescript
-import { wrapFetch } from "@x402/fetch";
+import { wrapFetchWithPayment, x402Client } from "@x402/fetch";
+import { registerExactSvmScheme } from "@x402/svm/exact/client";
+import { createKeyPairSignerFromPrivateKeyBytes } from "@solana/kit";
 
-const x402Fetch = wrapFetch(fetch, walletClient);
+const signer = await createKeyPairSignerFromPrivateKeyBytes(
+  new Uint8Array(keypairBytes.slice(0, 32)),
+);
+
+const client = new x402Client();
+registerExactSvmScheme(client, { signer });
+const x402Fetch = wrapFetchWithPayment(fetch, client);
 ```
 
 ## Endpoints
@@ -35,8 +43,10 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/crawl", {
     format: "markdown",
   }),
 });
+const data = await res.json();
+// data.content[0] contains the markdown
 
-// Bulk URLs
+// Bulk URLs (one payment for all)
 const res = await x402Fetch("https://web.surf.cascade.fyi/v1/crawl", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -45,6 +55,8 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/crawl", {
     format: "markdown",
   }),
 });
+const results = await res.json();
+// results is an array of { status, content[], url }
 ```
 
 | Param | Type | Required | Description |
@@ -57,10 +69,17 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/crawl", {
 
 *Provide either `url` or `urls`, not both.
 
-**Response (single):** `{ status, content[], url }`
-**Response (bulk):** `[{ status, content[], url }, ...]`
+**Response (single):**
 
-**Auto-escalation:** The crawler automatically escalates through fetching strategies (simple HTTP -> browser-like -> stealth) when content appears blocked.
+```typescript
+interface CrawlResponse {
+  status: number;    // HTTP status from crawled page
+  content: string[]; // Extracted content (may have multiple parts)
+  url: string;       // Final URL (after redirects)
+}
+```
+
+**Response (bulk):** `CrawlResponse[]`
 
 ### POST /v1/search
 
@@ -75,6 +94,8 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/search", {
     num_results: 5,
   }),
 });
+const data = await res.json();
+// data.results[0].title, data.results[0].url, data.results[0].snippet
 ```
 
 | Param | Type | Required | Description |
@@ -82,7 +103,17 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/search", {
 | query | string | yes | Search query |
 | num_results | integer | no | 1-20, default 5 |
 
-**Response:** `{ results: [{ title, url, snippet }] }`
+**Response:**
+
+```typescript
+interface SearchResponse {
+  results: {
+    title: string;
+    url: string;
+    snippet: string;
+  }[];
+}
+```
 
 ## Errors
 
@@ -90,15 +121,26 @@ const res = await x402Fetch("https://web.surf.cascade.fyi/v1/search", {
 |------|---------|
 | 400 | Invalid request (check format, url/urls) |
 | 402 | Payment required (handled automatically by @x402/fetch) |
-| 429 | Too many concurrent crawls (max 5) |
+| 429 | Too many concurrent crawls (max 10) |
 | 502 | Upstream error |
 
 ## Pricing
 
 | Endpoint | Cost |
 |----------|------|
-| POST /v1/crawl | $0.005 |
-| POST /v1/search | $0.01 |
+| POST /v1/crawl | $0.005 per request |
+| POST /v1/search | $0.01 per request |
+
+Bulk crawls (`urls` array) cost one payment regardless of how many URLs are included.
+
+## Tips
+
+- Use `format: "markdown"` for LLM consumption, `format: "text"` for minimal output.
+- Use `selector` (CSS selector) to extract just the content you need, e.g. `"article"`, `"main"`, `".post-body"`.
+- Use `urls` array instead of multiple single calls to save on payments.
+- The crawler auto-escalates through strategies (simple HTTP -> browser-like -> stealth) when content looks blocked. No configuration needed.
+- Set `proxy: true` for sites with aggressive anti-bot protection.
+- The `content` array may have multiple elements if the page has distinct content sections.
 
 ## Payment
 
