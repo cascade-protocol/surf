@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-bg: oklch(0.129 0.042 264.695);
+  --color-fg: oklch(0.984 0.003 247.858);
+  --color-card: oklch(0.208 0.042 265.755);
+  --color-muted: oklch(0.704 0.04 256.788);
+  --color-accent: oklch(0.488 0.243 264.376);
+  --color-secondary: oklch(0.279 0.041 260.031);
+  --color-ring: oklch(0.551 0.027 264.364);
+  --color-border: oklch(1 0 0 / 0.1);
+
+  --font-mono: "SF Mono", "Fira Code", monospace;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s infinite;
+}
