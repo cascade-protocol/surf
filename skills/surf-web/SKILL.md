@@ -1,13 +1,13 @@
 ---
 name: surf-web
-description: "Web crawling and search via Surf's paid API: crawl URLs ($0.005) and search via Exa ($0.01) at web.surf.cascade.fyi. Uses @x402/fetch for automatic USDC micropayments on Solana. Use when: (1) scraping web pages to markdown/html/text, (2) searching the web, (3) bulk crawling multiple URLs, (4) extracting content from behind anti-bot protection."
+description: "Web crawling and search via Surf's paid API: crawl URLs ($0.005) and search via Exa ($0.01) at web.surf.cascade.fyi. Uses @x402/fetch for automatic USDC micropayments on Solana or Base. Use when: (1) scraping web pages to markdown/html/text, (2) searching the web, (3) bulk crawling multiple URLs, (4) extracting content from behind anti-bot protection."
 ---
 
 # Surf Web
 
-Web crawling and search API at `https://web.surf.cascade.fyi`. USDC micropayments via x402 on Solana.
+Web crawling and search API at `https://web.surf.cascade.fyi`. USDC micropayments via x402 on Solana or Base.
 
-## Setup
+## Setup (Solana)
 
 ```bash
 npm install @x402/fetch @x402/svm @solana/kit
@@ -24,6 +24,29 @@ const signer = await createKeyPairSignerFromPrivateKeyBytes(
 
 const client = new x402Client();
 registerExactSvmScheme(client, { signer });
+const x402Fetch = wrapFetchWithPayment(fetch, client);
+```
+
+## Setup (Base / EVM)
+
+```bash
+npm install @x402/fetch @x402/evm viem
+```
+
+```typescript
+import { wrapFetchWithPayment, x402Client } from "@x402/fetch";
+import { registerExactEvmScheme } from "@x402/evm/exact/client";
+import { toClientEvmSigner } from "@x402/evm";
+import { createPublicClient, http } from "viem";
+import { base } from "viem/chains";
+import { privateKeyToAccount } from "viem/accounts";
+
+const account = privateKeyToAccount("0x...");
+const publicClient = createPublicClient({ chain: base, transport: http() });
+const evmSigner = toClientEvmSigner(account, publicClient);
+
+const client = new x402Client();
+registerExactEvmScheme(client, { signer: evmSigner });
 const x402Fetch = wrapFetchWithPayment(fetch, client);
 ```
 
@@ -144,6 +167,6 @@ Bulk crawls (`urls` array) cost one payment regardless of how many URLs are incl
 
 ## Payment
 
-- Network: Solana mainnet
+- Networks: Solana mainnet, Base mainnet
 - Token: USDC
-- Facilitator: https://facilitator.cascade.fyi
+- Facilitator: https://facilitator.payai.network

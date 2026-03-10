@@ -10,7 +10,7 @@ Live at [surf.cascade.fyi](https://surf.cascade.fyi)
 |---------|--------|-------|----------|
 | **Inference** - LLM chat completions (Kimi K2.5, MiniMax M2.5) | `inference.surf.cascade.fyi` | $0.002-0.003 | Solana |
 | **Twitter** - Search tweets, fetch users and tweets | `twitter.surf.cascade.fyi` | $0.003 | Solana, Base |
-| **Web** - Crawl pages, search via Exa | `web.surf.cascade.fyi` | $0.005-0.01 | Solana |
+| **Web** - Crawl pages, search via Exa | `web.surf.cascade.fyi` | $0.005-0.01 | Solana, Base |
 
 ## Quick start
 

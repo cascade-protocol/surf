@@ -44,7 +44,7 @@ const SERVICES = [
       { label: "Crawl", price: "$0.005" },
       { label: "Search", price: "$0.01" },
     ],
-    networks: ["Solana"],
+    networks: ["Solana", "Base"],
   },
 ] as const;
 
@@ -61,10 +61,6 @@ function HomePage() {
 function Hero() {
   return (
     <section className="mb-16 pt-8 text-center">
-      <div className="mb-3 flex items-center justify-center gap-2">
-        <span className="inline-block size-2 animate-pulse-dot rounded-full bg-green-400" />
-        <span className="text-muted text-sm">Live on Solana mainnet</span>
-      </div>
       <h1 className="mb-4 text-4xl font-bold">Pay-per-use APIs for AI agents</h1>
       <p className="text-muted mx-auto max-w-md text-lg">
         Inference, Twitter data, and web scraping. No API keys, no subscriptions - just pay per
