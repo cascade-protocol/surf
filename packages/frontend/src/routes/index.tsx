@@ -108,6 +108,71 @@ const TWITTER_ENDPOINTS = [
   },
 ] as const;
 
+const RESPONSE_EXAMPLE = `// GET /users/cascade_fyi  ($0.001)
+{
+  "data": {
+    "id": "1716142083299860480",
+    "username": "cascade_fyi",
+    "name": "Cascade",
+    "description": "Pay-per-use APIs for AI agents",
+    "public_metrics": {
+      "followers_count": 128,
+      "following_count": 42,
+      "tweet_count": 314,
+      "like_count": 891
+    },
+    "created_at": "2023-10-22T15:30:00.000Z",
+    "profile_image_url": "https://pbs.twimg.com/..."
+  }
+}`;
+
+const WORKFLOW_EXAMPLE = `// Research a person: profile + latest article + AI summary
+const profile = await x402Fetch("https://twitter.surf.cascade.fyi/users/elonmusk");
+const { data: user } = await profile.json();
+
+const tweets = await x402Fetch(\`https://twitter.surf.cascade.fyi/users/\${user.username}/tweets\`);
+const { data: posts } = await tweets.json();
+
+const article = posts.find(t => t.entities?.urls?.length);
+const page = await x402Fetch("https://web.surf.cascade.fyi/v1/crawl", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ url: article.entities.urls[0].expanded_url }),
+});
+
+const summary = await x402Fetch("https://inference.surf.cascade.fyi/v1/chat/completions", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    model: "moonshotai/kimi-k2.5",
+    messages: [{ role: "user", content: \`Summarize: \${(await page.json()).content}\` }],
+  }),
+});
+// Total cost: $0.001 + $0.002 + $0.005 + $0.004 = $0.012`;
+
+const FAQ_ITEMS = [
+  {
+    q: "What is x402?",
+    a: "x402 is an open HTTP payment protocol backed by Coinbase. When your agent hits a paid endpoint, the server returns 402 Payment Required with payment instructions. The client library (@x402/fetch) automatically signs a USDC payment and retries. Your agent's wallet is the only credential needed - no API keys, no OAuth, no accounts.",
+  },
+  {
+    q: "Do I pay for failed requests?",
+    a: "No. Payment is only settled on-chain when the server returns a successful response. If the upstream service errors or times out, you are not charged.",
+  },
+  {
+    q: "What are the rate limits?",
+    a: "Inference: 20 requests per 60 seconds per wallet. Web: 10 concurrent requests. Twitter: no per-wallet rate limit. If you hit a limit, you get a 429 response with no charge.",
+  },
+  {
+    q: "What wallet do I need?",
+    a: "Any Solana or Base (EVM) wallet holding USDC. For testing, x402-proxy generates a wallet on first run. For production, pass your Keypair (Solana) or WalletClient (Base) to @x402/fetch.",
+  },
+  {
+    q: "What happens when my balance runs out?",
+    a: "You get a 402 response with an insufficient-balance reason. No partial charges - either the full request is paid or nothing is deducted. Top up your USDC and retry.",
+  },
+] as const;
+
 const COST_EXAMPLES = [
   {
     title: "Research 20 outreach targets",
@@ -130,6 +195,9 @@ function HomePage() {
       <CostExamples />
       <QuickStart />
       <Services />
+      <ResponseExample />
+      <WorkflowExample />
+      <FAQ />
     </>
   );
 }
@@ -142,6 +210,18 @@ function Hero() {
         <p className="mx-auto max-w-lg text-lg text-muted-foreground">
           Your agent's wallet is the only credential. No API keys to provision, no subscriptions to
           manage. One wallet, three services.
+        </p>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Built on{" "}
+          <a
+            href="https://www.x402.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-2 hover:underline"
+          >
+            x402
+          </a>
+          , the Coinbase-backed HTTP payment protocol
         </p>
       </div>
       <CodeBlock code="npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi" />
@@ -372,6 +452,52 @@ function QuickStart() {
           </CardContent>
         </Card>
       </div>
+    </section>
+  );
+}
+
+function ResponseExample() {
+  return (
+    <section className="mb-16">
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">
+        What you get back
+      </h2>
+      <CodeBlock code={RESPONSE_EXAMPLE} header="Response" />
+    </section>
+  );
+}
+
+function WorkflowExample() {
+  return (
+    <section className="mb-16">
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">
+        Three services, one flow
+      </h2>
+      <p className="mb-4 text-sm text-muted-foreground">
+        Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.012.
+      </p>
+      <CodeBlock code={WORKFLOW_EXAMPLE} header="workflow.ts" />
+    </section>
+  );
+}
+
+function FAQ() {
+  return (
+    <section className="mb-16">
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">FAQ</h2>
+      <Card>
+        <CardContent className="divide-y divide-border px-5 py-0">
+          {FAQ_ITEMS.map((item) => (
+            <details key={item.q} className="group py-4">
+              <summary className="flex cursor-pointer select-none list-none items-center gap-2 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
+                <ChevronRight className="size-3.5 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" />
+                {item.q}
+              </summary>
+              <p className="mt-2 pl-6 text-sm text-muted-foreground">{item.a}</p>
+            </details>
+          ))}
+        </CardContent>
+      </Card>
     </section>
   );
 }
