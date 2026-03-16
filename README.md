@@ -8,8 +8,8 @@ Live at [surf.cascade.fyi](https://surf.cascade.fyi)
 
 | Service | Domain | Price | Networks |
 |---------|--------|-------|----------|
-| **Inference** - LLM chat completions (Kimi K2.5, MiniMax M2.5) | `inference.surf.cascade.fyi` | $0.002-0.003 | Solana |
-| **Twitter** - Search tweets, fetch users and tweets | `twitter.surf.cascade.fyi` | $0.003 | Solana, Base |
+| **Inference** - LLM chat completions (Kimi K2.5, MiniMax M2.5) | `inference.surf.cascade.fyi` | $0.003-0.004 | Solana, Base |
+| **Twitter** - Search tweets, fetch users and tweets | `twitter.surf.cascade.fyi` | $0.001-0.005 | Solana, Base |
 | **Web** - Crawl pages, search via Exa | `web.surf.cascade.fyi` | $0.005-0.01 | Solana, Base |
 
 ## Quick start
@@ -46,7 +46,7 @@ Surf ships [Claude Code skills](https://github.com/anthropics/claude-code/blob/m
 npx skills add cascade-protocol/surf -g
 ```
 
-Installs three skills: `surf-inference`, `surf-twitter`, `surf-web`.
+Installs the unified `surf` skill with references for each service.
 
 ## Development
 

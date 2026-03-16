@@ -9,7 +9,7 @@ Three APIs, one wallet. No API keys, no subscriptions.
 
 | Service | Base URL | Price range |
 |---------|----------|-------------|
-| Twitter | `twitter.surf.cascade.fyi` | $0.001 - $0.003/req |
+| Twitter | `twitter.surf.cascade.fyi` | $0.001 - $0.005/req |
 | Inference | `inference.surf.cascade.fyi` | $0.003 - $0.004/req |
 | Web | `web.surf.cascade.fyi` | $0.005 - $0.01/req |
 
@@ -23,7 +23,7 @@ Test any endpoint with [x402-proxy](https://github.com/cascade-protocol/x402-pro
 # Fetch a Twitter profile ($0.001)
 npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi
 
-# Get recent tweets ($0.002)
+# Get recent tweets ($0.004)
 npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi/tweets
 
 # Chat with Kimi K2.5 ($0.004)
@@ -48,8 +48,8 @@ First run walks you through wallet setup automatically.
 | Tier | Cost | Endpoints |
 |------|------|-----------|
 | Lookup | $0.001 | Single tweet, user profile, relationship check, trends, spaces |
-| Paginated | $0.002 | Timelines, followers, user search, replies, lists, communities |
-| Search | $0.003 | Tweet search with advanced operators, article content |
+| Paginated | $0.004 | Timelines, followers, user search, replies, lists, communities |
+| Search | $0.005 | Tweet search with advanced operators, article content |
 
 ### Inference
 
@@ -68,9 +68,9 @@ First run walks you through wallet setup automatically.
 ### Cost example
 
 An agent doing 1,000 Twitter lookups + 100 tweet searches + 50 inference calls per day:
-- Twitter: 1,000 x $0.001 + 100 x $0.003 = $1.30
+- Twitter: 1,000 x $0.001 + 100 x $0.005 = $1.50
 - Inference: 50 x $0.004 = $0.20
-- **Total: $1.50/day**
+- **Total: $1.70/day**
 
 ## Integrate with @x402/fetch
 

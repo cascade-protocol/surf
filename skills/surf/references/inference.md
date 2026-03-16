@@ -47,7 +47,7 @@ const data = await res.json();
 | `model` | string | yes | Model identifier (see table above) |
 | `messages` | array | yes | Chat messages with `role` (user/assistant/system) and `content` |
 | `stream` | boolean | no | Enable SSE streaming (default: false) |
-| `max_tokens` | number | no | Max tokens to generate |
+| `max_tokens` | number | no | Max tokens to generate (capped at 2048) |
 | `temperature` | number | no | Sampling temperature (0-2) |
 
 ## Streaming

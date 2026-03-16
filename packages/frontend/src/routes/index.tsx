@@ -34,7 +34,7 @@ const SERVICES = [
       { method: "GET", path: "/tweets/search" },
       { method: "GET", path: "/tweets/{id}" },
     ],
-    pricing: [{ label: "Per request", price: "$0.001 – $0.003" }],
+    pricing: [{ label: "Per request", price: "$0.001 – $0.005" }],
     networks: ["Solana", "Base"],
   },
   {
@@ -58,45 +58,45 @@ const TWITTER_ENDPOINTS = [
   {
     group: "Tweets",
     endpoints: [
-      { path: "/tweets/search", price: "$0.003" },
+      { path: "/tweets/search", price: "$0.005" },
       { path: "/tweets/{id}", price: "$0.001" },
-      { path: "/tweets", price: "$0.002" },
-      { path: "/tweets/{id}/replies", price: "$0.002" },
-      { path: "/tweets/{id}/quotes", price: "$0.002" },
-      { path: "/tweets/{id}/retweeters", price: "$0.002" },
-      { path: "/tweets/{id}/thread", price: "$0.002" },
-      { path: "/tweets/{id}/article", price: "$0.003" },
+      { path: "/tweets", price: "$0.004" },
+      { path: "/tweets/{id}/replies", price: "$0.004" },
+      { path: "/tweets/{id}/quotes", price: "$0.004" },
+      { path: "/tweets/{id}/retweeters", price: "$0.004" },
+      { path: "/tweets/{id}/thread", price: "$0.004" },
+      { path: "/tweets/{id}/article", price: "$0.005" },
     ],
   },
   {
     group: "Users",
     endpoints: [
       { path: "/users/{ref}", price: "$0.001" },
-      { path: "/users/search", price: "$0.002" },
+      { path: "/users/search", price: "$0.004" },
       { path: "/users/relationship", price: "$0.001" },
-      { path: "/users", price: "$0.002" },
-      { path: "/users/{ref}/tweets", price: "$0.002" },
-      { path: "/users/{ref}/mentions", price: "$0.002" },
-      { path: "/users/{ref}/followers", price: "$0.002" },
-      { path: "/users/{ref}/following", price: "$0.002" },
-      { path: "/users/{ref}/verified_followers", price: "$0.002" },
+      { path: "/users", price: "$0.004" },
+      { path: "/users/{ref}/tweets", price: "$0.004" },
+      { path: "/users/{ref}/mentions", price: "$0.004" },
+      { path: "/users/{ref}/followers", price: "$0.004" },
+      { path: "/users/{ref}/following", price: "$0.004" },
+      { path: "/users/{ref}/verified_followers", price: "$0.004" },
     ],
   },
   {
     group: "Lists",
     endpoints: [
-      { path: "/lists/{id}/tweets", price: "$0.002" },
-      { path: "/lists/{id}/members", price: "$0.002" },
-      { path: "/lists/{id}/followers", price: "$0.002" },
+      { path: "/lists/{id}/tweets", price: "$0.004" },
+      { path: "/lists/{id}/members", price: "$0.004" },
+      { path: "/lists/{id}/followers", price: "$0.004" },
     ],
   },
   {
     group: "Communities",
     endpoints: [
-      { path: "/communities/search", price: "$0.002" },
-      { path: "/communities/{id}", price: "$0.002" },
-      { path: "/communities/{id}/tweets", price: "$0.002" },
-      { path: "/communities/{id}/members", price: "$0.002" },
+      { path: "/communities/search", price: "$0.004" },
+      { path: "/communities/{id}", price: "$0.004" },
+      { path: "/communities/{id}/tweets", price: "$0.004" },
+      { path: "/communities/{id}/members", price: "$0.004" },
     ],
   },
   {
@@ -148,7 +148,7 @@ const summary = await x402Fetch("https://inference.surf.cascade.fyi/v1/chat/comp
     messages: [{ role: "user", content: \`Summarize: \${(await page.json()).content}\` }],
   }),
 });
-// Total cost: $0.001 + $0.002 + $0.005 + $0.004 = $0.012`;
+// Total cost: $0.001 + $0.004 + $0.005 + $0.004 = $0.014`;
 
 const FAQ_ITEMS = [
   {
@@ -176,13 +176,13 @@ const FAQ_ITEMS = [
 const COST_EXAMPLES = [
   {
     title: "Research 20 outreach targets",
-    total: "$0.18",
+    total: "$0.27",
     calls: "70 API calls",
     breakdown: "5 searches + 20 profiles + 20 timelines + 5 page crawls + 20 LLM calls",
   },
   {
     title: "Monitor a keyword for a week",
-    total: "$0.25",
+    total: "$0.37",
     calls: "126 API calls",
     breakdown: "49 searches + 50 tweet lookups + 20 profiles + 7 daily summaries",
   },
@@ -474,7 +474,7 @@ function WorkflowExample() {
         Three services, one flow
       </h2>
       <p className="mb-4 text-sm text-muted-foreground">
-        Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.012.
+        Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.014.
       </p>
       <CodeBlock code={WORKFLOW_EXAMPLE} header="workflow.ts" />
     </section>

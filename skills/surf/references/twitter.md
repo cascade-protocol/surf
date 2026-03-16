@@ -36,7 +36,7 @@ const { data, meta } = await res.json();
 ```
 
 Query params: `include_replies` (boolean)
-**Cost:** $0.002
+**Cost:** $0.004
 
 ### Search tweets
 
@@ -55,7 +55,7 @@ Query params: `q` (required), `sort` (Latest | Top), `limit` (1-200)
 
 Search operators: `from:user`, `to:user`, `min_faves:N`, `min_retweets:N`, `filter:media`, `since:YYYY-MM-DD`, `until:YYYY-MM-DD`, `lang:en`
 
-**Cost:** $0.003
+**Cost:** $0.005
 
 ### Get single tweet
 
@@ -77,7 +77,7 @@ const { data } = await res.json();
 npx x402-proxy https://twitter.surf.cascade.fyi/tweets/1585841080431321088/thread
 ```
 
-**Cost:** $0.002
+**Cost:** $0.004
 
 ### Check follow relationship
 
@@ -101,45 +101,45 @@ const { data } = await res.json();
 
 | Endpoint | Params | Cost |
 |----------|--------|------|
-| `GET /tweets/search` | `q` (required), `sort`, `limit` | $0.003 |
+| `GET /tweets/search` | `q` (required), `sort`, `limit` | $0.005 |
 | `GET /tweets/{id}` | | $0.001 |
-| `GET /tweets` | `ids` (comma-separated, required) | $0.002 |
-| `GET /tweets/{id}/replies` | | $0.002 |
-| `GET /tweets/{id}/quotes` | | $0.002 |
-| `GET /tweets/{id}/retweeters` | | $0.002 |
-| `GET /tweets/{id}/thread` | | $0.002 |
-| `GET /tweets/{id}/article` | | $0.003 |
+| `GET /tweets` | `ids` (comma-separated, required) | $0.004 |
+| `GET /tweets/{id}/replies` | | $0.004 |
+| `GET /tweets/{id}/quotes` | | $0.004 |
+| `GET /tweets/{id}/retweeters` | | $0.004 |
+| `GET /tweets/{id}/thread` | | $0.004 |
+| `GET /tweets/{id}/article` | | $0.005 |
 
 ### Users
 
 | Endpoint | Params | Cost |
 |----------|--------|------|
-| `GET /users/search` | `q` (required) | $0.002 |
+| `GET /users/search` | `q` (required) | $0.004 |
 | `GET /users/relationship` | `source`, `target` (both required) | $0.001 |
 | `GET /users/{ref}` | | $0.001 |
-| `GET /users` | `ids` (comma-separated, required) | $0.002 |
-| `GET /users/{ref}/tweets` | `include_replies` | $0.002 |
-| `GET /users/{ref}/mentions` | | $0.002 |
-| `GET /users/{ref}/followers` | | $0.002 |
-| `GET /users/{ref}/following` | | $0.002 |
-| `GET /users/{ref}/verified_followers` | | $0.002 |
+| `GET /users` | `ids` (comma-separated, required) | $0.004 |
+| `GET /users/{ref}/tweets` | `include_replies` | $0.004 |
+| `GET /users/{ref}/mentions` | | $0.004 |
+| `GET /users/{ref}/followers` | | $0.004 |
+| `GET /users/{ref}/following` | | $0.004 |
+| `GET /users/{ref}/verified_followers` | | $0.004 |
 
 ### Lists
 
 | Endpoint | Params | Cost |
 |----------|--------|------|
-| `GET /lists/{id}/tweets` | | $0.002 |
-| `GET /lists/{id}/members` | | $0.002 |
-| `GET /lists/{id}/followers` | | $0.002 |
+| `GET /lists/{id}/tweets` | | $0.004 |
+| `GET /lists/{id}/members` | | $0.004 |
+| `GET /lists/{id}/followers` | | $0.004 |
 
 ### Communities
 
 | Endpoint | Params | Cost |
 |----------|--------|------|
-| `GET /communities/search` | `q` (required), `sort` | $0.002 |
-| `GET /communities/{id}` | | $0.002 |
-| `GET /communities/{id}/tweets` | | $0.002 |
-| `GET /communities/{id}/members` | | $0.002 |
+| `GET /communities/search` | `q` (required), `sort` | $0.004 |
+| `GET /communities/{id}` | | $0.004 |
+| `GET /communities/{id}/tweets` | | $0.004 |
+| `GET /communities/{id}/members` | | $0.004 |
 
 ### Other
 
