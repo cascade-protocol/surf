@@ -3,7 +3,7 @@
 Base URL: `https://twitter.surf.cascade.fyi`
 OpenAPI spec: `https://twitter.surf.cascade.fyi/openapi.json`
 
-27 GET endpoints across tweets, users, lists, communities, spaces, and trends.
+25 GET endpoints across tweets, users, lists, communities, spaces, and trends.
 `{ref}` accepts a username or numeric user ID. `{id}` is a numeric ID.
 
 ## Core endpoints
@@ -116,7 +116,6 @@ const { data } = await res.json();
 | `GET /users/search` | `q` (required) | $0.002 |
 | `GET /users/relationship` | `source`, `target` (both required) | $0.001 |
 | `GET /users/{ref}` | | $0.001 |
-| `GET /users/{ref}/about` | | $0.001 |
 | `GET /users` | `ids` (comma-separated, required) | $0.002 |
 | `GET /users/{ref}/tweets` | `include_replies` | $0.002 |
 | `GET /users/{ref}/mentions` | | $0.002 |
@@ -140,7 +139,6 @@ const { data } = await res.json();
 | `GET /communities/{id}` | | $0.002 |
 | `GET /communities/{id}/tweets` | | $0.002 |
 | `GET /communities/{id}/members` | | $0.002 |
-| `GET /communities/{id}/moderators` | | $0.002 |
 
 ### Other
 

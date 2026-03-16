@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bot, Check, Copy, Globe, MessageSquare, Zap } from "lucide-react";
+import { Bot, Check, ChevronRight, Copy, Globe, MessageSquare, Terminal, Zap } from "lucide-react";
 import { useCallback, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -24,18 +27,14 @@ const SERVICES = [
     icon: MessageSquare,
     domain: "twitter.surf.cascade.fyi",
     description:
-      "Twitter data API. 27 endpoints across tweets, users, lists, communities, spaces, and trends.",
+      "Twitter data API. 25 endpoints across tweets, users, lists, communities, spaces, and trends.",
     endpoints: [
       { method: "GET", path: "/users/{ref}" },
       { method: "GET", path: "/users/{ref}/tweets" },
-      { method: "GET", path: "/tweets/search?q={query}" },
+      { method: "GET", path: "/tweets/search" },
       { method: "GET", path: "/tweets/{id}" },
     ],
-    pricing: [
-      { label: "Lookup", price: "$0.001" },
-      { label: "Paginated", price: "$0.002" },
-      { label: "Search", price: "$0.003" },
-    ],
+    pricing: [{ label: "Per request", price: "$0.001 – $0.003" }],
     networks: ["Solana", "Base"],
   },
   {
@@ -55,24 +54,117 @@ const SERVICES = [
   },
 ] as const;
 
+const TWITTER_ENDPOINTS = [
+  {
+    group: "Tweets",
+    endpoints: [
+      { path: "/tweets/search", price: "$0.003" },
+      { path: "/tweets/{id}", price: "$0.001" },
+      { path: "/tweets", price: "$0.002" },
+      { path: "/tweets/{id}/replies", price: "$0.002" },
+      { path: "/tweets/{id}/quotes", price: "$0.002" },
+      { path: "/tweets/{id}/retweeters", price: "$0.002" },
+      { path: "/tweets/{id}/thread", price: "$0.002" },
+    ],
+  },
+  {
+    group: "Users",
+    endpoints: [
+      { path: "/users/{ref}", price: "$0.001" },
+      { path: "/users/search", price: "$0.002" },
+      { path: "/users/relationship", price: "$0.001" },
+      { path: "/users", price: "$0.002" },
+      { path: "/users/{ref}/tweets", price: "$0.002" },
+      { path: "/users/{ref}/mentions", price: "$0.002" },
+      { path: "/users/{ref}/followers", price: "$0.002" },
+      { path: "/users/{ref}/following", price: "$0.002" },
+      { path: "/users/{ref}/verified_followers", price: "$0.002" },
+    ],
+  },
+  {
+    group: "Lists",
+    endpoints: [
+      { path: "/lists/{id}/tweets", price: "$0.002" },
+      { path: "/lists/{id}/members", price: "$0.002" },
+      { path: "/lists/{id}/followers", price: "$0.002" },
+    ],
+  },
+  {
+    group: "Communities",
+    endpoints: [
+      { path: "/communities/search", price: "$0.002" },
+      { path: "/communities/{id}", price: "$0.002" },
+      { path: "/communities/{id}/tweets", price: "$0.002" },
+      { path: "/communities/{id}/members", price: "$0.002" },
+    ],
+  },
+  {
+    group: "Other",
+    endpoints: [
+      { path: "/spaces/{id}", price: "$0.001" },
+      { path: "/trends", price: "$0.001" },
+    ],
+  },
+] as const;
+
+const COST_EXAMPLES = [
+  {
+    title: "Research 20 outreach targets",
+    total: "$0.18",
+    calls: "70 API calls",
+    breakdown: "5 searches + 20 profiles + 20 timelines + 5 page crawls + 20 LLM calls",
+  },
+  {
+    title: "Monitor a keyword for a week",
+    total: "$0.25",
+    calls: "126 API calls",
+    breakdown: "49 searches + 50 tweet lookups + 20 profiles + 7 daily summaries",
+  },
+] as const;
+
 function HomePage() {
   return (
     <>
       <Hero />
-      <Services />
+      <CostExamples />
       <QuickStart />
+      <Services />
     </>
   );
 }
 
 function Hero() {
   return (
-    <section className="mb-16 pt-8 text-center">
-      <h1 className="mb-4 text-4xl font-bold">Pay-per-use APIs for AI agents</h1>
-      <p className="text-muted mx-auto max-w-md text-lg">
-        Inference, Twitter data, and web scraping. No API keys, no subscriptions - just pay per
-        request with USDC via the x402 protocol.
-      </p>
+    <section className="mb-16 pt-8">
+      <div className="mb-8 text-center">
+        <h1 className="mb-4 text-4xl font-bold">Pay-per-use APIs for AI agents</h1>
+        <p className="mx-auto max-w-lg text-lg text-muted-foreground">
+          Your agent's wallet is the only credential. No API keys to provision, no subscriptions to
+          manage. One wallet, three services.
+        </p>
+      </div>
+      <CodeBlock code="npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi" />
+    </section>
+  );
+}
+
+function CostExamples() {
+  return (
+    <section className="mb-16">
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">What it costs</h2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {COST_EXAMPLES.map((ex) => (
+          <Card key={ex.title}>
+            <CardContent className="px-5 py-4">
+              <p className="mb-1 text-sm font-medium text-foreground">{ex.title}</p>
+              <p className="mb-2 font-mono text-2xl font-bold text-primary">{ex.total}</p>
+              <p className="text-xs text-muted-foreground">
+                {ex.calls} &mdash; {ex.breakdown}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </section>
   );
 }
@@ -80,7 +172,7 @@ function Hero() {
 function Services() {
   return (
     <section className="mb-16">
-      <h2 className="text-muted mb-6 text-xs uppercase tracking-wider">Services</h2>
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">Services</h2>
       <div className="grid gap-4">
         {SERVICES.map((svc) => (
           <ServiceCard key={svc.name} {...svc} />
@@ -100,52 +192,89 @@ function ServiceCard({
   networks,
 }: (typeof SERVICES)[number]) {
   return (
-    <div className="rounded-[0.625rem] border border-border bg-card px-5 py-5">
-      <div className="mb-3 flex items-center justify-between">
+    <Card>
+      <CardHeader className="flex-row items-center justify-between px-5 pb-0 pt-5">
         <div className="flex items-center gap-2.5">
-          <Icon className="size-4 text-accent" />
-          <h3 className="font-semibold">{name}</h3>
+          <Icon className="size-4 text-primary" />
+          <CardTitle>{name}</CardTitle>
         </div>
         <div className="flex gap-1.5">
           {networks.map((net) => (
-            <span
-              key={net}
-              className="rounded border border-border bg-secondary px-1.5 py-0.5 text-[0.65rem] text-accent"
-            >
+            <Badge key={net} variant="secondary">
               {net}
-            </span>
+            </Badge>
           ))}
         </div>
-      </div>
+      </CardHeader>
+      <CardContent className="space-y-4 px-5 pb-5 pt-3">
+        <CardDescription>{description}</CardDescription>
 
-      <p className="text-muted mb-4 text-sm">{description}</p>
+        <div className="space-y-1.5">
+          {endpoints.map((ep) => (
+            <div key={ep.path} className="flex items-center gap-3 font-mono text-xs">
+              <span
+                className={cn(
+                  "min-w-[3rem] rounded px-1.5 py-0.5 text-center text-[0.65rem] font-bold",
+                  ep.method === "GET"
+                    ? "bg-secondary text-green-400"
+                    : "bg-secondary text-yellow-400",
+                )}
+              >
+                {ep.method}
+              </span>
+              <span className="text-foreground/80">{ep.path}</span>
+            </div>
+          ))}
+        </div>
 
-      <div className="mb-3 space-y-1.5">
-        {endpoints.map((ep) => (
-          <div key={ep.path} className="flex items-center gap-3 font-mono text-xs">
-            <span
-              className={`min-w-[3rem] rounded px-1.5 py-0.5 text-center text-[0.65rem] font-bold ${
-                ep.method === "GET" ? "bg-secondary text-green-400" : "bg-secondary text-yellow-400"
-              }`}
-            >
-              {ep.method}
-            </span>
-            <span className="text-fg/80">{ep.path}</span>
+        {name === "Twitter" && (
+          <details className="group">
+            <summary className="flex cursor-pointer select-none list-none items-center gap-1.5 text-xs font-medium text-primary [&::-webkit-details-marker]:hidden">
+              <ChevronRight className="size-3 transition-transform group-open:rotate-90" />
+              All 25 endpoints
+            </summary>
+            <div className="mt-3 space-y-3">
+              {TWITTER_ENDPOINTS.map((g) => (
+                <div key={g.group}>
+                  <p className="mb-1 text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
+                    {g.group}
+                  </p>
+                  <div className="space-y-1">
+                    {g.endpoints.map((ep) => (
+                      <div
+                        key={ep.path}
+                        className="flex items-center justify-between font-mono text-xs"
+                      >
+                        <span className="text-foreground/80">GET {ep.path}</span>
+                        <span className="text-muted-foreground">{ep.price}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
+
+        <div className="flex items-center justify-between border-t border-border pt-3">
+          <div className="flex gap-3">
+            {pricing.map((p) => (
+              <span key={p.label} className="text-xs text-muted-foreground">
+                {p.label}: <span className="font-mono font-medium text-foreground">{p.price}</span>
+              </span>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-between border-t border-border pt-3">
-        <div className="flex gap-3">
-          {pricing.map((p) => (
-            <span key={p.label} className="text-muted text-xs">
-              {p.label}: <span className="text-fg font-mono font-medium">{p.price}</span>
-            </span>
-          ))}
+          <a
+            href={`https://${domain}/openapi.json`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-medium text-primary underline-offset-2 hover:underline"
+          >
+            OpenAPI spec &rarr;
+          </a>
         </div>
-        <code className="text-muted text-[0.65rem]">{domain}</code>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -163,7 +292,7 @@ function CopyButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={copy}
-      className="absolute top-2.5 right-2.5 rounded border border-border bg-secondary p-1.5 text-muted transition-colors hover:text-fg"
+      className="absolute top-2.5 right-2.5 rounded border border-border bg-secondary p-1.5 text-muted-foreground transition-colors hover:text-foreground"
     >
       {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
     </button>
@@ -189,40 +318,66 @@ function CodeBlock({ code, header }: { code: string; header?: string }) {
 function QuickStart() {
   return (
     <section className="mb-16">
-      <h2 className="text-muted mb-6 text-xs uppercase tracking-wider">Quick Start</h2>
+      <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">Get started</h2>
 
       <div className="space-y-4">
-        <div className="rounded-[0.625rem] border border-border bg-card px-5 py-4">
-          <div className="mb-3 flex items-center gap-2">
-            <Zap className="size-4 text-accent" />
-            <h3 className="text-sm font-semibold">Try it now</h3>
-          </div>
-          <p className="text-muted mb-3 text-sm">
-            Test any endpoint instantly with{" "}
-            <a
-              href="https://github.com/cascade-protocol/x402-proxy"
-              className="text-accent underline-offset-2 hover:underline"
-            >
-              x402-proxy
-            </a>{" "}
-            - no code, no wallet setup:
-          </p>
-          <CodeBlock code={tryItExample} />
-        </div>
+        <Card>
+          <CardContent className="px-5 py-4">
+            <div className="mb-3 flex items-center gap-2">
+              <Zap className="size-4 text-primary" />
+              <h3 className="text-sm font-semibold">Add to Claude Code</h3>
+            </div>
+            <p className="mb-3 text-sm text-muted-foreground">
+              Install the{" "}
+              <a
+                href="https://github.com/cascade-protocol/surf/tree/main/skills/surf"
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                Surf skill
+              </a>{" "}
+              - adds the API reference to your Claude so you can skip the docs:
+            </p>
+            <CodeBlock code={skillInstall} />
+          </CardContent>
+        </Card>
 
-        <div className="rounded-[0.625rem] border border-border bg-card px-5 py-4">
-          <div className="mb-3 flex items-center gap-2">
-            <Zap className="size-4 text-accent" />
-            <h3 className="text-sm font-semibold">Integrate with @x402/fetch</h3>
-          </div>
-          <CodeBlock code={codeExample} header="npm install @x402/fetch" />
-        </div>
+        <Card>
+          <CardContent className="px-5 py-4">
+            <div className="mb-3 flex items-center gap-2">
+              <Terminal className="size-4 text-primary" />
+              <h3 className="text-sm font-semibold">Try an endpoint</h3>
+            </div>
+            <p className="mb-3 text-sm text-muted-foreground">
+              Test any endpoint with{" "}
+              <a
+                href="https://github.com/cascade-protocol/x402-proxy"
+                className="text-primary underline-offset-2 hover:underline"
+              >
+                x402-proxy
+              </a>{" "}
+              - no code, no wallet setup:
+            </p>
+            <CodeBlock code={tryItExample} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="px-5 py-4">
+            <div className="mb-3 flex items-center gap-2">
+              <Zap className="size-4 text-primary" />
+              <h3 className="text-sm font-semibold">Integrate with @x402/fetch</h3>
+            </div>
+            <CodeBlock code={codeExample} header="npm install @x402/fetch" />
+          </CardContent>
+        </Card>
       </div>
     </section>
   );
 }
 
-const tryItExample = `npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi`;
+const skillInstall = "npx skills add cascade-protocol/surf";
+
+const tryItExample = "npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi";
 
 const codeExample = `import { wrapFetch } from "@x402/fetch";
 

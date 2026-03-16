@@ -11,12 +11,12 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "x402-powered APIs for inference, Twitter data, and web scraping. No API keys, no subscriptions - pay per request with USDC.",
+          "Pay-per-use APIs for AI agents. Inference, Twitter data, and web scraping - no API keys, just pay per request with USDC.",
       },
       { property: "og:title", content: "Cascade Surf" },
       {
         property: "og:description",
-        content: "Pay-per-use APIs for AI agents, powered by x402",
+        content: "Pay-per-use APIs for AI agents. One wallet, three services.",
       },
       { name: "twitter:card", content: "summary" },
     ],
@@ -34,7 +34,7 @@ function RootLayout() {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-bg text-fg min-h-screen">
+      <body className="bg-background text-foreground min-h-screen">
         <div className="flex min-h-screen flex-col items-center px-6">
           <nav className="flex w-full max-w-[720px] items-center justify-between py-6">
             <Link to="/" className="flex items-center gap-2.5">
@@ -46,7 +46,7 @@ function RootLayout() {
                 href="https://x.com/cascade_fyi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted text-sm transition-colors hover:text-fg"
+                className="text-muted-foreground text-sm transition-colors hover:text-foreground"
               >
                 @cascade_fyi
               </a>
@@ -54,7 +54,7 @@ function RootLayout() {
                 href="https://github.com/cascade-protocol"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted text-sm transition-colors hover:text-fg"
+                className="text-muted-foreground text-sm transition-colors hover:text-foreground"
               >
                 GitHub
               </a>
@@ -65,13 +65,13 @@ function RootLayout() {
             <Outlet />
           </main>
 
-          <footer className="w-full max-w-[720px] border-t border-border py-8 text-center text-xs text-ring">
+          <footer className="w-full max-w-[720px] border-t border-border py-8 text-center text-xs text-muted-foreground">
             Built with{" "}
             <a
               href="https://www.x402.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline"
+              className="text-primary hover:underline"
             >
               x402
             </a>{" "}
@@ -80,7 +80,7 @@ function RootLayout() {
               href="https://cascade.fyi"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline"
+              className="text-primary hover:underline"
             >
               Cascade
             </a>
