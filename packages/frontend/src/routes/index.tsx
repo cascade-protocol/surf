@@ -27,7 +27,7 @@ const SERVICES = [
     icon: MessageSquare,
     domain: "twitter.surf.cascade.fyi",
     description:
-      "Twitter data API. 25 endpoints across tweets, users, lists, communities, spaces, and trends.",
+      "Twitter data API. 26 endpoints across tweets, users, lists, communities, spaces, and trends.",
     endpoints: [
       { method: "GET", path: "/users/{ref}" },
       { method: "GET", path: "/users/{ref}/tweets" },
@@ -65,6 +65,7 @@ const TWITTER_ENDPOINTS = [
       { path: "/tweets/{id}/quotes", price: "$0.002" },
       { path: "/tweets/{id}/retweeters", price: "$0.002" },
       { path: "/tweets/{id}/thread", price: "$0.002" },
+      { path: "/tweets/{id}/article", price: "$0.003" },
     ],
   },
   {
@@ -231,7 +232,7 @@ function ServiceCard({
           <details className="group">
             <summary className="flex cursor-pointer select-none list-none items-center gap-1.5 text-xs font-medium text-primary [&::-webkit-details-marker]:hidden">
               <ChevronRight className="size-3 transition-transform group-open:rotate-90" />
-              All 25 endpoints
+              All 26 endpoints
             </summary>
             <div className="mt-3 space-y-3">
               {TWITTER_ENDPOINTS.map((g) => (

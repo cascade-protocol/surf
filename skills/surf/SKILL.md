@@ -43,13 +43,13 @@ First run walks you through wallet setup automatically.
 
 ## Pricing
 
-### Twitter (25 endpoints)
+### Twitter (26 endpoints)
 
 | Tier | Cost | Endpoints |
 |------|------|-----------|
 | Lookup | $0.001 | Single tweet, user profile, relationship check, trends, spaces |
 | Paginated | $0.002 | Timelines, followers, user search, replies, lists, communities |
-| Search | $0.003 | Tweet search with advanced operators |
+| Search | $0.003 | Tweet search with advanced operators, article content |
 
 ### Inference
 
@@ -150,6 +150,6 @@ Each service serves its full OpenAPI spec:
 
 For full endpoint docs, request/response formats, and query parameters:
 
-- **Twitter** (25 endpoints) - read `references/twitter.md`
+- **Twitter** (26 endpoints) - read `references/twitter.md`
 - **Inference** (chat completions + streaming) - read `references/inference.md`
 - **Web** (crawl + search) - read `references/web.md`
