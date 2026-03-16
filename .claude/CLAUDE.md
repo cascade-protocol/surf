@@ -31,7 +31,7 @@ Documentation site and skills for Cascade's pay-per-use APIs (inference, Twitter
 
 ## Skills
 - Skills live in `skills/` (NOT a workspace package)
-- Each skill: `skills/<name>/SKILL.md`
-- Three skills for Surf APIs: surf-inference, surf-twitter, surf-web
-- Skills teach users how to call Surf APIs using `@x402/fetch` for automatic USDC micropayments
+- One unified skill: `skills/surf/SKILL.md` with `references/` for per-service details
+- `references/twitter.md` (27 endpoints), `references/inference.md`, `references/web.md`
+- Skills teach users how to call Surf APIs using `@x402/fetch` and `npx x402-proxy`
 - Installed via `npx skills add cascade-protocol/surf -g`

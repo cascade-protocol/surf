@@ -13,22 +13,28 @@ const SERVICES = [
     description: "LLM gateway via OpenRouter. Send chat completions, pay per request.",
     endpoints: [{ method: "POST", path: "/v1/chat/completions" }],
     pricing: [
-      { label: "kimi-k2.5", price: "$0.003" },
-      { label: "minimax-m2.5", price: "$0.002" },
+      { label: "kimi-k2.5", price: "$0.004" },
+      { label: "minimax-m2.5", price: "$0.003" },
     ],
-    networks: ["Solana"],
+    networks: ["Solana", "Base"],
   },
   {
     name: "Twitter",
     icon: MessageSquare,
     domain: "twitter.surf.cascade.fyi",
-    description: "Twitter data API. Search tweets, fetch users and individual tweets.",
+    description:
+      "Twitter data API. 27 endpoints across tweets, users, lists, communities, spaces, and trends.",
     endpoints: [
-      { method: "GET", path: "/search?q={query}" },
-      { method: "GET", path: "/user/{id}" },
-      { method: "GET", path: "/tweet/{id}" },
+      { method: "GET", path: "/users/{ref}" },
+      { method: "GET", path: "/users/{ref}/tweets" },
+      { method: "GET", path: "/tweets/search?q={query}" },
+      { method: "GET", path: "/tweets/{id}" },
     ],
-    pricing: [{ label: "All endpoints", price: "$0.003" }],
+    pricing: [
+      { label: "Lookup", price: "$0.001" },
+      { label: "Paginated", price: "$0.002" },
+      { label: "Search", price: "$0.003" },
+    ],
     networks: ["Solana", "Base"],
   },
   {
@@ -151,45 +157,45 @@ function QuickStart() {
         <div className="rounded-[0.625rem] border border-border bg-card px-5 py-4">
           <div className="mb-3 flex items-center gap-2">
             <Zap className="size-4 text-accent" />
-            <h3 className="text-sm font-semibold">How x402 works</h3>
+            <h3 className="text-sm font-semibold">Try it now</h3>
           </div>
-          <ol className="text-muted space-y-1.5 text-sm">
-            <li>
-              <span className="text-fg font-mono font-medium">1.</span> Your request hits the API
-              without any auth headers
-            </li>
-            <li>
-              <span className="text-fg font-mono font-medium">2.</span> Server responds with{" "}
-              <code className="rounded bg-secondary px-1.5 py-0.5 text-xs text-accent">
-                402 Payment Required
-              </code>
-            </li>
-            <li>
-              <span className="text-fg font-mono font-medium">3.</span>{" "}
-              <code className="rounded bg-secondary px-1.5 py-0.5 text-xs text-accent">
-                @x402/fetch
-              </code>{" "}
-              signs a USDC payment and retries automatically
-            </li>
-            <li>
-              <span className="text-fg font-mono font-medium">4.</span> You get your response. The
-              facilitator settles the payment on-chain.
-            </li>
-          </ol>
+          <p className="text-muted mb-3 text-sm">
+            Test any endpoint instantly with{" "}
+            <a
+              href="https://github.com/cascade-protocol/x402-proxy"
+              className="text-accent underline-offset-2 hover:underline"
+            >
+              x402-proxy
+            </a>{" "}
+            - no code, no wallet setup:
+          </p>
+          <div className="overflow-hidden rounded-lg border border-border bg-[#131416]">
+            <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
+              <code>{tryItExample}</code>
+            </pre>
+          </div>
         </div>
 
-        <div className="overflow-hidden rounded-[0.625rem] border border-border bg-[#131416]">
-          <div className="border-b border-border/50 px-4 py-2 text-[0.7rem] text-yellow-400">
-            npm install @x402/fetch
+        <div className="rounded-[0.625rem] border border-border bg-card px-5 py-4">
+          <div className="mb-3 flex items-center gap-2">
+            <Zap className="size-4 text-accent" />
+            <h3 className="text-sm font-semibold">Integrate with @x402/fetch</h3>
           </div>
-          <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
-            <code>{codeExample}</code>
-          </pre>
+          <div className="overflow-hidden rounded-lg border border-border bg-[#131416]">
+            <div className="border-b border-border/50 px-4 py-2 text-[0.7rem] text-yellow-400">
+              npm install @x402/fetch
+            </div>
+            <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
+              <code>{codeExample}</code>
+            </pre>
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+const tryItExample = `npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi`;
 
 const codeExample = `import { wrapFetch } from "@x402/fetch";
 
