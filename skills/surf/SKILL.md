@@ -41,6 +41,36 @@ npx x402-proxy --method POST \
 
 First run walks you through wallet setup automatically.
 
+## Twitter MCP Server
+
+Twitter is also available as an MCP server with 3 composite tools that bundle multiple API calls into single tool invocations.
+
+Setup wallet (first time only):
+
+```bash
+npx x402-proxy
+```
+
+Add to Claude Code:
+
+```bash
+claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+```
+
+Use with any MCP-compatible client:
+
+```bash
+npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+```
+
+| Tool | Cost | What it bundles |
+|------|------|-----------------|
+| `twitter_search` | $0.008 | Advanced search with 50+ operators, enriched results with engagement summary |
+| `twitter_tweet` | $0.005 | Tweet + thread context + parent (if reply). Optionally include replies/quotes |
+| `twitter_user` | $0.005 | User profile + recent tweets timeline |
+
+Each tool call costs more than its REST equivalent but bundles what would be 2-3 separate API calls into one. A `twitter_tweet` call returning tweet + thread ($0.005) replaces `GET /tweets/{id}` + `GET /tweets/{id}/thread` ($0.001 + $0.004 = $0.005 via REST).
+
 ## Pricing
 
 ### Twitter (26 endpoints)

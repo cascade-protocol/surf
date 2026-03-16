@@ -6,6 +6,34 @@ OpenAPI spec: `https://twitter.surf.cascade.fyi/openapi.json`
 26 GET endpoints across tweets, users, lists, communities, spaces, and trends.
 `{ref}` accepts a username or numeric user ID. `{id}` is a numeric ID.
 
+## MCP Server
+
+Twitter is also available as an MCP server with 3 composite tools. Add to Claude Code:
+
+```bash
+claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+```
+
+Or start the MCP server for any client:
+
+```bash
+npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+```
+
+Setup wallet first (one-time): `npx x402-proxy`
+
+### MCP Tools
+
+| Tool | Params | Cost |
+|------|--------|------|
+| `twitter_search` | `query` (required), `sort` (Latest/Top), `limit`, `cursor` | $0.008 |
+| `twitter_tweet` | `ref` (tweet ID or URL), `include` (replies/quotes), `max_results` | $0.005 |
+| `twitter_user` | `ref` (username), `max_results`, `include_replies` | $0.005 |
+
+These are composite tools - `twitter_tweet` returns tweet + thread + parent in one call, `twitter_user` returns profile + recent tweets. Use the REST endpoints below for granular access at lower per-request cost.
+
+Free resource: `docs://search-operators` - full operator reference for search queries.
+
 ## Core endpoints
 
 ### Get user profile

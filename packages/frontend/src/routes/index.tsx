@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bot, Check, ChevronRight, Copy, Globe, MessageSquare, Terminal, Zap } from "lucide-react";
+import {
+  Bot,
+  Check,
+  ChevronRight,
+  Copy,
+  Globe,
+  MessageSquare,
+  Plug,
+  Terminal,
+  Zap,
+} from "lucide-react";
 import { useCallback, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,6 +118,12 @@ const TWITTER_ENDPOINTS = [
   },
 ] as const;
 
+const MCP_TOOLS = [
+  { name: "twitter_search", desc: "Search with advanced operators", price: "$0.008" },
+  { name: "twitter_tweet", desc: "Tweet + thread + replies", price: "$0.005" },
+  { name: "twitter_user", desc: "Profile + recent tweets", price: "$0.005" },
+] as const;
+
 const RESPONSE_EXAMPLE = `// GET /users/cascade_fyi  ($0.001)
 {
   "data": {
@@ -170,6 +186,10 @@ const FAQ_ITEMS = [
   {
     q: "What happens when my balance runs out?",
     a: "You get a 402 response with an insufficient-balance reason. No partial charges - either the full request is paid or nothing is deducted. Top up your USDC and retry.",
+  },
+  {
+    q: "What is the Twitter MCP server?",
+    a: "An MCP server at twitter.surf.cascade.fyi/mcp that exposes 3 composite tools: twitter_search ($0.008), twitter_tweet ($0.005), and twitter_user ($0.005). Each tool bundles multiple API calls into one - for example, twitter_tweet returns the tweet, its thread, and parent context in a single call. Add it to Claude Code with: claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp",
   },
 ] as const;
 
@@ -337,6 +357,28 @@ function ServiceCard({
           </details>
         )}
 
+        {name === "Twitter" && (
+          <div className="space-y-1.5">
+            <p className="text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
+              MCP Tools
+            </p>
+            <div className="space-y-1">
+              {MCP_TOOLS.map((tool) => (
+                <div
+                  key={tool.name}
+                  className="flex items-center justify-between font-mono text-xs"
+                >
+                  <span className="text-foreground/80">{tool.name}</span>
+                  <span className="text-muted-foreground">{tool.price}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[0.65rem] text-muted-foreground">
+              Composite tools - each bundles multiple API calls into one.
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center justify-between border-t border-border pt-3">
           <div className="flex gap-3">
             {pricing.map((p) => (
@@ -425,6 +467,20 @@ function QuickStart() {
         <Card>
           <CardContent className="px-5 py-4">
             <div className="mb-3 flex items-center gap-2">
+              <Plug className="size-4 text-primary" />
+              <h3 className="text-sm font-semibold">Connect as MCP Server</h3>
+            </div>
+            <p className="mb-3 text-sm text-muted-foreground">
+              Twitter data as native Claude tools. 3 composite tools that bundle search, profiles,
+              threads, and replies into single calls.
+            </p>
+            <CodeBlock code={mcpInstallExample} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="px-5 py-4">
+            <div className="mb-3 flex items-center gap-2">
               <Terminal className="size-4 text-primary" />
               <h3 className="text-sm font-semibold">Try an endpoint</h3>
             </div>
@@ -503,6 +559,15 @@ function FAQ() {
 }
 
 const skillInstall = "npx skills add cascade-protocol/surf";
+
+const mcpInstallExample = `# Setup wallet (first time only)
+npx x402-proxy
+
+# Add to Claude Code
+claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+
+# Or start the MCP server for any client
+npx x402-proxy https://twitter.surf.cascade.fyi/mcp`;
 
 const tryItExample = "npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi";
 
