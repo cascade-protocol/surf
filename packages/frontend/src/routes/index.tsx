@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bot, Globe, MessageSquare, Zap } from "lucide-react";
+import { Bot, Check, Copy, Globe, MessageSquare, Zap } from "lucide-react";
+import { useCallback, useState } from "react";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -148,6 +149,43 @@ function ServiceCard({
   );
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = useCallback(() => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }, [text]);
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      className="absolute top-2.5 right-2.5 rounded border border-border bg-secondary p-1.5 text-muted transition-colors hover:text-fg"
+    >
+      {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+    </button>
+  );
+}
+
+function CodeBlock({ code, header }: { code: string; header?: string }) {
+  return (
+    <div className="relative overflow-hidden rounded-lg border border-border bg-[#131416]">
+      {header && (
+        <div className="border-b border-border/50 px-4 py-2 text-[0.7rem] text-yellow-400">
+          {header}
+        </div>
+      )}
+      <CopyButton text={code} />
+      <pre className="overflow-x-auto p-4 pr-10 font-mono text-xs leading-relaxed">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
 function QuickStart() {
   return (
     <section className="mb-16">
@@ -169,11 +207,7 @@ function QuickStart() {
             </a>{" "}
             - no code, no wallet setup:
           </p>
-          <div className="overflow-hidden rounded-lg border border-border bg-[#131416]">
-            <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
-              <code>{tryItExample}</code>
-            </pre>
-          </div>
+          <CodeBlock code={tryItExample} />
         </div>
 
         <div className="rounded-[0.625rem] border border-border bg-card px-5 py-4">
@@ -181,14 +215,7 @@ function QuickStart() {
             <Zap className="size-4 text-accent" />
             <h3 className="text-sm font-semibold">Integrate with @x402/fetch</h3>
           </div>
-          <div className="overflow-hidden rounded-lg border border-border bg-[#131416]">
-            <div className="border-b border-border/50 px-4 py-2 text-[0.7rem] text-yellow-400">
-              npm install @x402/fetch
-            </div>
-            <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed">
-              <code>{codeExample}</code>
-            </pre>
-          </div>
+          <CodeBlock code={codeExample} header="npm install @x402/fetch" />
         </div>
       </div>
     </section>
