@@ -87,6 +87,7 @@ Each tool call costs more than its REST equivalent but bundles what would be 2-3
 |-------|------|
 | `moonshotai/kimi-k2.5` | $0.004 |
 | `minimax/minimax-m2.5` | $0.003 |
+| `qwen/qwen-2.5-7b-instruct` | $0.001 |
 
 ### Web
 

@@ -11,6 +11,7 @@ OpenAI-compatible chat completion endpoint. One route: `POST /v1/chat/completion
 |-------|------|-------|
 | `moonshotai/kimi-k2.5` | $0.004 | Strong reasoning, code, long context |
 | `minimax/minimax-m2.5` | $0.003 | Fast general-purpose |
+| `qwen/qwen-2.5-7b-instruct` | $0.001 | Lightweight, fast, cheap utility tier |
 
 ## Chat completion
 

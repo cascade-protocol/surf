@@ -29,6 +29,7 @@ const SERVICES = [
     pricing: [
       { label: "kimi-k2.5", price: "$0.004" },
       { label: "minimax-m2.5", price: "$0.003" },
+      { label: "qwen-2.5-7b", price: "$0.001" },
     ],
     networks: ["Solana", "Base"],
   },
