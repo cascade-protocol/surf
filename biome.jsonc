@@ -24,17 +24,13 @@
       "semicolons": "always"
     }
   },
+  "files": {
+    "includes": ["**", "!**/routeTree.gen.ts"]
+  },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true,
     "defaultBranch": "main"
-  },
-  "overrides": [
-    {
-      "includes": ["**/routeTree.gen.ts"],
-      "linter": { "enabled": false },
-      "formatter": { "enabled": false }
-    }
-  ]
+  }
 }
