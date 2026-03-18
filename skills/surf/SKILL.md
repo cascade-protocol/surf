@@ -111,31 +111,34 @@ An agent doing 1,000 Twitter lookups + 100 tweet searches + 50 inference calls p
 ## Integrate with @x402/fetch
 
 ```bash
-npm install @x402/fetch
+npm install @x402/fetch @x402/evm @x402/svm
 ```
 
 ### Solana wallet
 
 ```typescript
-import { wrapFetch } from "@x402/fetch";
-import { Keypair } from "@solana/web3.js";
-import bs58 from "bs58";
+import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
+import { registerExactSvmScheme } from "@x402/svm/exact/client";
+import { createKeyPairSignerFromBytes } from "@solana/kit";
+import { base58 } from "@scure/base";
 
-const keypair = Keypair.fromSecretKey(bs58.decode(process.env.SOLANA_PRIVATE_KEY!));
-const fetchX402 = wrapFetch(fetch, keypair);
+const svmSigner = await createKeyPairSignerFromBytes(base58.decode(process.env.SVM_PRIVATE_KEY!));
+const client = new x402Client();
+registerExactSvmScheme(client, { signer: svmSigner });
+const fetchX402 = wrapFetchWithPayment(fetch, client);
 ```
 
 ### Base (EVM) wallet
 
 ```typescript
-import { wrapFetch } from "@x402/fetch";
-import { createWalletClient, http } from "viem";
+import { x402Client, wrapFetchWithPayment } from "@x402/fetch";
+import { registerExactEvmScheme } from "@x402/evm/exact/client";
 import { privateKeyToAccount } from "viem/accounts";
-import { base } from "viem/chains";
 
-const account = privateKeyToAccount(process.env.EVM_PRIVATE_KEY as `0x${string}`);
-const wallet = createWalletClient({ account, chain: base, transport: http() });
-const fetchX402 = wrapFetch(fetch, wallet);
+const signer = privateKeyToAccount(process.env.EVM_PRIVATE_KEY as `0x${string}`);
+const client = new x402Client();
+registerExactEvmScheme(client, { signer });
+const fetchX402 = wrapFetchWithPayment(fetch, client);
 ```
 
 Then call any Surf endpoint like a normal fetch:
