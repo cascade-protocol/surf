@@ -9,6 +9,10 @@ OpenAI-compatible chat completion endpoint. One route: `POST /v1/chat/completion
 
 | Model | Cost | Notes |
 |-------|------|-------|
+| `anthropic/claude-sonnet-4.5` | from $0.10 | Dynamic pricing - varies by token usage (base: 4096 max_tokens) |
+| `anthropic/claude-sonnet-4.6` | from $0.10 | Dynamic pricing - varies by token usage (base: 4096 max_tokens) |
+| `anthropic/claude-opus-4.5` | from $0.17 | Dynamic pricing - varies by token usage (base: 4096 max_tokens) |
+| `anthropic/claude-opus-4.6` | from $0.17 | Dynamic pricing - varies by token usage (base: 4096 max_tokens) |
 | `moonshotai/kimi-k2.5` | $0.004 | Strong reasoning, code, long context |
 | `minimax/minimax-m2.5` | $0.003 | Fast general-purpose |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Lightweight, fast, cheap utility tier |
@@ -48,7 +52,8 @@ const data = await res.json();
 | `model` | string | yes | Model identifier (see table above) |
 | `messages` | array | yes | Chat messages with `role` (user/assistant/system) and `content` |
 | `stream` | boolean | no | Enable SSE streaming (default: false) |
-| `max_tokens` | number | no | Max tokens to generate (capped at 2048) |
+| `max_tokens` | number | no | Max tokens to generate. Defaults to 2048 for flat models, 4096 for dynamic models. Higher values increase the x402 price for dynamic models |
+| `max_completion_tokens` | number | no | Alias for max_tokens (preferred for Anthropic models) |
 | `temperature` | number | no | Sampling temperature (0-2) |
 
 ## Streaming

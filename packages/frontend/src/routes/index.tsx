@@ -24,9 +24,13 @@ const SERVICES = [
     name: "Inference",
     icon: Bot,
     domain: "inference.surf.cascade.fyi",
-    description: "LLM gateway via OpenRouter. Send chat completions, pay per request.",
+    description: "Multi-model LLM API. Send chat completions, pay per request.",
     endpoints: [{ method: "POST", path: "/v1/chat/completions" }],
     pricing: [
+      { label: "claude-sonnet-4.5", price: "$0.10", dynamic: true },
+      { label: "claude-sonnet-4.6", price: "$0.10", dynamic: true },
+      { label: "claude-opus-4.5", price: "$0.17", dynamic: true },
+      { label: "claude-opus-4.6", price: "$0.17", dynamic: true },
       { label: "kimi-k2.5", price: "$0.004" },
       { label: "minimax-m2.5", price: "$0.003" },
       { label: "qwen-2.5-7b", price: "$0.001" },
@@ -381,10 +385,18 @@ function ServiceCard({
         )}
 
         <div className="flex items-center justify-between border-t border-border pt-3">
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
             {pricing.map((p) => (
               <span key={p.label} className="text-xs text-muted-foreground">
-                {p.label}: <span className="font-mono font-medium text-foreground">{p.price}</span>
+                {p.label}:{" "}
+                {"dynamic" in p ? (
+                  <>
+                    <span className="font-mono text-muted-foreground/60">from</span>{" "}
+                    <span className="font-mono font-medium text-foreground">{p.price}</span>
+                  </>
+                ) : (
+                  <span className="font-mono font-medium text-foreground">{p.price}</span>
+                )}
               </span>
             ))}
           </div>
