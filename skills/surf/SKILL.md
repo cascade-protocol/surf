@@ -89,6 +89,7 @@ Each tool call costs more than its REST equivalent but bundles what would be 2-3
 | `anthropic/claude-sonnet-4.6` | from $0.10 | Dynamic - varies by token usage |
 | `anthropic/claude-opus-4.5` | from $0.17 | Dynamic - varies by token usage |
 | `anthropic/claude-opus-4.6` | from $0.17 | Dynamic - varies by token usage |
+| `z-ai/glm-5` | from $0.030 | Dynamic - strongest open-weight coding/agent model |
 | `moonshotai/kimi-k2.5` | $0.004 | Flat per-request |
 | `minimax/minimax-m2.5` | $0.003 | Flat per-request |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Flat per-request |
