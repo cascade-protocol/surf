@@ -1,6 +1,6 @@
 # Surf
 
-Pay-per-use API gateway for AI agents. Inference, Twitter data, and web crawling - no API keys, no subscriptions. Pay per request with USDC via the [x402](https://www.x402.org/) protocol.
+Pay-per-use API gateway for AI agents. Inference, Twitter data, Reddit data, and web crawling - no API keys, no subscriptions. Pay per request with USDC via the [x402](https://www.x402.org/) protocol.
 
 Live at [surf.cascade.fyi](https://surf.cascade.fyi)
 
@@ -10,6 +10,7 @@ Live at [surf.cascade.fyi](https://surf.cascade.fyi)
 |---------|--------|-------|----------|
 | **Inference** - LLM chat completions (GLM-5, Claude, Kimi K2.5, MiniMax M2.5, Qwen 2.5 7B) | `inference.surf.cascade.fyi` | $0.001-0.23 | Solana, Base |
 | **Twitter** - Search tweets, fetch users and tweets | `twitter.surf.cascade.fyi` | $0.001-0.005 | Solana, Base |
+| **Reddit** - Search posts, subreddits, users, comments | `reddit.surf.cascade.fyi` | $0.001-0.005 | Solana, Base |
 | **Web** - Crawl pages, search via Exa | `web.surf.cascade.fyi` | $0.005-0.01 | Solana, Base |
 
 ## Quick start

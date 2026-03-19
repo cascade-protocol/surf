@@ -3,7 +3,30 @@
 Base URL: `https://web.surf.cascade.fyi`
 OpenAPI spec: `https://web.surf.cascade.fyi/openapi.json`
 
-Two POST endpoints: crawl web pages and search the web.
+Two POST endpoints: crawl web pages and search the web. Also available as an MCP server.
+
+## MCP Server
+
+Web is also available as an MCP server with 2 tools. Add to Claude Code:
+
+```bash
+claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp
+```
+
+Or start the MCP server for any client:
+
+```bash
+npx x402-proxy https://web.surf.cascade.fyi/mcp
+```
+
+Setup wallet first (one-time): `npx x402-proxy`
+
+### MCP Tools
+
+| Tool | Params | Cost |
+|------|--------|------|
+| `surf_web_search` | `query` (required), `num_results` | $0.01 |
+| `surf_web_crawl` | `url` (required), `format`, `selector`, `proxy` | $0.005 |
 
 ## Crawl
 

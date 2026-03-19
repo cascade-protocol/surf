@@ -1,6 +1,6 @@
 # Surf
 
-Documentation site and skills for Cascade's pay-per-use APIs (inference, Twitter, web) at surf.cascade.fyi.
+Documentation site and skills for Cascade's pay-per-use APIs (inference, Twitter, Reddit, web) at surf.cascade.fyi.
 
 ## Stack
 - pnpm workspaces monorepo + Turborepo
@@ -32,6 +32,6 @@ Documentation site and skills for Cascade's pay-per-use APIs (inference, Twitter
 ## Skills
 - Skills live in `skills/` (NOT a workspace package)
 - One unified skill: `skills/surf/SKILL.md` with `references/` for per-service details
-- `references/twitter.md` (27 endpoints), `references/inference.md`, `references/web.md`
+- `references/twitter.md` (26 endpoints), `references/reddit.md` (7 endpoints), `references/inference.md`, `references/web.md`
 - Skills teach users how to call Surf APIs using `@x402/fetch` and `npx x402-proxy`
 - Installed via `npx skills add cascade-protocol/surf -g`

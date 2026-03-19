@@ -55,6 +55,21 @@ const SERVICES = [
     networks: ["Solana", "Base"],
   },
   {
+    name: "Reddit",
+    icon: MessageSquare,
+    domain: "reddit.surf.cascade.fyi",
+    description:
+      "Reddit data API. 7 endpoints for searching posts, browsing subreddits, fetching posts with comments, and user profiles.",
+    endpoints: [
+      { method: "GET", path: "/search" },
+      { method: "GET", path: "/r/{subreddit}/posts" },
+      { method: "GET", path: "/posts/{id}" },
+      { method: "GET", path: "/users/{username}" },
+    ],
+    pricing: [{ label: "Per request", price: "$0.001 – $0.005" }],
+    networks: ["Solana", "Base"],
+  },
+  {
     name: "Web",
     icon: Globe,
     domain: "web.surf.cascade.fyi",
@@ -126,9 +141,46 @@ const TWITTER_ENDPOINTS = [
 ] as const;
 
 const MCP_TOOLS = [
-  { name: "twitter_search", desc: "Search with advanced operators", price: "$0.008" },
-  { name: "twitter_tweet", desc: "Tweet + thread + replies", price: "$0.005" },
-  { name: "twitter_user", desc: "Profile + recent tweets", price: "$0.005" },
+  { name: "surf_twitter_search", desc: "Search with advanced operators", price: "$0.008" },
+  { name: "surf_twitter_tweet", desc: "Tweet + thread + replies", price: "$0.005" },
+  { name: "surf_twitter_user", desc: "Profile + recent tweets", price: "$0.005" },
+] as const;
+
+const REDDIT_ENDPOINTS = [
+  {
+    group: "Search",
+    endpoints: [{ path: "/search", price: "$0.005" }],
+  },
+  {
+    group: "Subreddits",
+    endpoints: [
+      { path: "/r/{subreddit}", price: "$0.001" },
+      { path: "/r/{subreddit}/posts", price: "$0.003" },
+    ],
+  },
+  {
+    group: "Posts",
+    endpoints: [{ path: "/posts/{id}", price: "$0.004" }],
+  },
+  {
+    group: "Users",
+    endpoints: [
+      { path: "/users/{username}", price: "$0.001" },
+      { path: "/users/{username}/posts", price: "$0.004" },
+      { path: "/users/{username}/comments", price: "$0.004" },
+    ],
+  },
+] as const;
+
+const REDDIT_MCP_TOOLS = [
+  { name: "reddit_search", desc: "Search posts across Reddit", price: "$0.008" },
+  { name: "reddit_post", desc: "Post + comments", price: "$0.005" },
+  { name: "reddit_subreddit", desc: "Subreddit info + posts", price: "$0.005" },
+] as const;
+
+const WEB_MCP_TOOLS = [
+  { name: "surf_web_search", desc: "Semantic web search", price: "$0.01" },
+  { name: "surf_web_crawl", desc: "Extract page content", price: "$0.005" },
 ] as const;
 
 const RESPONSE_EXAMPLE = `// GET /users/cascade_fyi  ($0.001)
@@ -184,7 +236,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What are the rate limits?",
-    a: "Inference: 20 requests per 60 seconds per wallet. Web: 10 concurrent requests. Twitter: no per-wallet rate limit. If you hit a limit, you get a 429 response with no charge.",
+    a: "Inference: 20 requests per 60 seconds per wallet. Web: 10 concurrent requests. Twitter and Reddit: no per-wallet rate limit. If you hit a limit, you get a 429 response with no charge.",
   },
   {
     q: "What wallet do I need?",
@@ -195,8 +247,8 @@ const FAQ_ITEMS = [
     a: "You get a 402 response with an insufficient-balance reason. No partial charges - either the full request is paid or nothing is deducted. Top up your USDC and retry.",
   },
   {
-    q: "What is the Twitter MCP server?",
-    a: "An MCP server at twitter.surf.cascade.fyi/mcp that exposes 3 composite tools: twitter_search ($0.008), twitter_tweet ($0.005), and twitter_user ($0.005). Each tool bundles multiple API calls into one - for example, twitter_tweet returns the tweet, its thread, and parent context in a single call. Add it to Claude Code with: claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp",
+    q: "What are the MCP servers?",
+    a: "Twitter, Reddit, and Web are all available as MCP servers. Each exposes tools that wrap the REST endpoints for direct agent use. Add them to Claude Code with: claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp",
   },
 ] as const;
 
@@ -236,7 +288,7 @@ function Hero() {
         <h1 className="mb-4 text-4xl font-bold">Pay-per-use APIs for AI agents</h1>
         <p className="mx-auto max-w-lg text-lg text-muted-foreground">
           Your agent's wallet is the only credential. No API keys to provision, no subscriptions to
-          manage. One wallet, three services.
+          manage. One wallet, four services.
         </p>
         <p className="mt-3 text-xs text-muted-foreground">
           Built on{" "}
@@ -364,6 +416,35 @@ function ServiceCard({
           </details>
         )}
 
+        {name === "Reddit" && (
+          <details className="group">
+            <summary className="flex cursor-pointer select-none list-none items-center gap-1.5 text-xs font-medium text-primary [&::-webkit-details-marker]:hidden">
+              <ChevronRight className="size-3 transition-transform group-open:rotate-90" />
+              All 7 endpoints
+            </summary>
+            <div className="mt-3 space-y-3">
+              {REDDIT_ENDPOINTS.map((g) => (
+                <div key={g.group}>
+                  <p className="mb-1 text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
+                    {g.group}
+                  </p>
+                  <div className="space-y-1">
+                    {g.endpoints.map((ep) => (
+                      <div
+                        key={ep.path}
+                        className="flex items-center justify-between font-mono text-xs"
+                      >
+                        <span className="text-foreground/80">GET {ep.path}</span>
+                        <span className="text-muted-foreground">{ep.price}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
+
         {name === "Twitter" && (
           <div className="space-y-1.5">
             <p className="text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
@@ -383,6 +464,47 @@ function ServiceCard({
             <p className="text-[0.65rem] text-muted-foreground">
               Composite tools - each bundles multiple API calls into one.
             </p>
+          </div>
+        )}
+
+        {name === "Reddit" && (
+          <div className="space-y-1.5">
+            <p className="text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
+              MCP Tools
+            </p>
+            <div className="space-y-1">
+              {REDDIT_MCP_TOOLS.map((tool) => (
+                <div
+                  key={tool.name}
+                  className="flex items-center justify-between font-mono text-xs"
+                >
+                  <span className="text-foreground/80">{tool.name}</span>
+                  <span className="text-muted-foreground">{tool.price}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[0.65rem] text-muted-foreground">
+              Composite tools - each bundles multiple API calls into one.
+            </p>
+          </div>
+        )}
+
+        {name === "Web" && (
+          <div className="space-y-1.5">
+            <p className="text-[0.65rem] font-medium uppercase tracking-wider text-muted-foreground">
+              MCP Tools
+            </p>
+            <div className="space-y-1">
+              {WEB_MCP_TOOLS.map((tool) => (
+                <div
+                  key={tool.name}
+                  className="flex items-center justify-between font-mono text-xs"
+                >
+                  <span className="text-foreground/80">{tool.name}</span>
+                  <span className="text-muted-foreground">{tool.price}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -486,8 +608,8 @@ function QuickStart() {
               <h3 className="text-sm font-semibold">Connect as MCP Server</h3>
             </div>
             <p className="mb-3 text-sm text-muted-foreground">
-              Twitter data as native Claude tools. 3 composite tools that bundle search, profiles,
-              threads, and replies into single calls.
+              Twitter, Reddit, and Web as native Claude tools. Composite tools that wrap REST
+              endpoints for direct agent use.
             </p>
             <CodeBlock code={mcpInstallExample} />
           </CardContent>
@@ -542,7 +664,7 @@ function WorkflowExample() {
   return (
     <section className="mb-16">
       <h2 className="mb-6 text-xs uppercase tracking-wider text-muted-foreground">
-        Three services, one flow
+        Four services, one flow
       </h2>
       <p className="mb-4 text-sm text-muted-foreground">
         Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.014.
@@ -578,11 +700,10 @@ const skillInstall = "npx skills add cascade-protocol/surf";
 const mcpInstallExample = `# Setup wallet (first time only)
 npx x402-proxy
 
-# Add to Claude Code
+# Add MCP servers to Claude Code
 claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
-
-# Or start the MCP server for any client
-npx x402-proxy https://twitter.surf.cascade.fyi/mcp`;
+claude mcp add -s user reddit -- npx x402-proxy https://reddit.surf.cascade.fyi/mcp
+claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp`;
 
 const tryItExample = "npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi";
 

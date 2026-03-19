@@ -1,15 +1,16 @@
 ---
 name: surf
-description: Build with Surf pay-per-use APIs - Twitter data, LLM inference, and web scraping at surf.cascade.fyi. Use this skill whenever working with Surf endpoints, Twitter/X data extraction, web crawling/search, or pay-per-request LLM inference. Also use when setting up @x402/fetch for Surf services, using x402-proxy with Surf URLs, or any mention of twitter.surf, inference.surf, or web.surf domains. Even if the user just says "get tweets" or "crawl a page" and Surf is in the project context, use this skill.
+description: Build with Surf pay-per-use APIs - Twitter data, Reddit data, LLM inference, and web scraping at surf.cascade.fyi. Use this skill whenever working with Surf endpoints, Twitter/X data extraction, Reddit data, web crawling/search, or pay-per-request LLM inference. Also use when setting up @x402/fetch for Surf services, using x402-proxy with Surf URLs, or any mention of twitter.surf, reddit.surf, inference.surf, or web.surf domains. Even if the user just says "get tweets", "search reddit", or "crawl a page" and Surf is in the project context, use this skill.
 ---
 
 # Surf APIs
 
-Three APIs, one wallet. No API keys, no subscriptions.
+Four APIs, one wallet. No API keys, no subscriptions.
 
 | Service | Base URL | Price range |
 |---------|----------|-------------|
 | Twitter | `twitter.surf.cascade.fyi` | $0.001 - $0.005/req |
+| Reddit | `reddit.surf.cascade.fyi` | $0.001 - $0.005/req |
 | Inference | `inference.surf.cascade.fyi` | $0.001 - $0.17/req |
 | Web | `web.surf.cascade.fyi` | $0.005 - $0.01/req |
 
@@ -32,6 +33,9 @@ npx x402-proxy --method POST \
   --body '{"model":"moonshotai/kimi-k2.5","messages":[{"role":"user","content":"Hello"}]}' \
   https://inference.surf.cascade.fyi/v1/chat/completions
 
+# Search Reddit ($0.005)
+npx x402-proxy "https://reddit.surf.cascade.fyi/search?q=x402+protocol"
+
 # Crawl a webpage ($0.005)
 npx x402-proxy --method POST \
   --header "Content-Type: application/json" \
@@ -41,9 +45,9 @@ npx x402-proxy --method POST \
 
 First run walks you through wallet setup automatically.
 
-## Twitter MCP Server
+## MCP Servers
 
-Twitter is also available as an MCP server with 3 composite tools that bundle multiple API calls into single tool invocations.
+Twitter and Reddit are available as MCP servers with composite tools that bundle multiple API calls into single tool invocations.
 
 Setup wallet (first time only):
 
@@ -55,23 +59,45 @@ Add to Claude Code:
 
 ```bash
 claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+claude mcp add -s user reddit -- npx x402-proxy https://reddit.surf.cascade.fyi/mcp
+claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp
 ```
 
-Use with any MCP-compatible client:
-
-```bash
-npx x402-proxy https://twitter.surf.cascade.fyi/mcp
-```
+### Twitter MCP Tools
 
 | Tool | Cost | What it bundles |
 |------|------|-----------------|
-| `twitter_search` | $0.008 | Advanced search with 50+ operators, enriched results with engagement summary |
-| `twitter_tweet` | $0.005 | Tweet + thread context + parent (if reply). Optionally include replies/quotes |
-| `twitter_user` | $0.005 | User profile + recent tweets timeline |
+| `surf_twitter_search` | $0.008 | Advanced search with 50+ operators, enriched results with engagement summary |
+| `surf_twitter_tweet` | $0.005 | Tweet + thread context + parent (if reply). Optionally include replies/quotes |
+| `surf_twitter_user` | $0.005 | User profile + recent tweets timeline |
 
-Each tool call costs more than its REST equivalent but bundles what would be 2-3 separate API calls into one. A `twitter_tweet` call returning tweet + thread ($0.005) replaces `GET /tweets/{id}` + `GET /tweets/{id}/thread` ($0.001 + $0.004 = $0.005 via REST).
+### Reddit MCP Tools
+
+| Tool | Cost | What it bundles |
+|------|------|-----------------|
+| `reddit_search` | $0.008 | Search posts across Reddit with sort/time filters |
+| `reddit_post` | $0.005 | Post + comments with depth/sort control |
+| `reddit_subreddit` | $0.005 | Subreddit info + top posts |
+
+### Web MCP Tools
+
+| Tool | Cost | What it does |
+|------|------|--------------|
+| `surf_web_search` | $0.01 | Semantic web search via Exa |
+| `surf_web_crawl` | $0.005 | Extract web page content as markdown/HTML/text |
+
+Each tool call costs the same as its REST equivalent but wrapped as MCP tools for direct agent use.
 
 ## Pricing
+
+### Reddit (7 endpoints)
+
+| Tier | Cost | Endpoints |
+|------|------|-----------|
+| Lookup | $0.001 | Subreddit info, user profile |
+| Listing | $0.003 | Subreddit posts |
+| Content | $0.004 | Post with comments, user posts, user comments |
+| Search | $0.005 | Search across Reddit |
 
 ### Twitter (26 endpoints)
 
@@ -104,10 +130,11 @@ Each tool call costs more than its REST equivalent but bundles what would be 2-3
 
 ### Cost example
 
-An agent doing 1,000 Twitter lookups + 100 tweet searches + 50 inference calls per day:
+An agent doing 1,000 Twitter lookups + 200 Reddit lookups + 100 tweet searches + 50 inference calls per day:
 - Twitter: 1,000 x $0.001 + 100 x $0.005 = $1.50
+- Reddit: 200 x $0.003 = $0.60
 - Inference: 50 x $0.004 = $0.20
-- **Total: $1.70/day**
+- **Total: $2.30/day**
 
 ## Integrate with @x402/fetch
 
@@ -183,6 +210,7 @@ npx x402-proxy wallet history    # payment log
 Each service serves its full OpenAPI spec:
 
 - `https://twitter.surf.cascade.fyi/openapi.json`
+- `https://reddit.surf.cascade.fyi/openapi.json`
 - `https://inference.surf.cascade.fyi/openapi.json`
 - `https://web.surf.cascade.fyi/openapi.json`
 
@@ -191,5 +219,6 @@ Each service serves its full OpenAPI spec:
 For full endpoint docs, request/response formats, and query parameters:
 
 - **Twitter** (26 endpoints) - read `references/twitter.md`
+- **Reddit** (7 endpoints) - read `references/reddit.md`
 - **Inference** (chat completions + streaming) - read `references/inference.md`
 - **Web** (crawl + search) - read `references/web.md`

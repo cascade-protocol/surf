@@ -26,11 +26,11 @@ Setup wallet first (one-time): `npx x402-proxy`
 
 | Tool | Params | Cost |
 |------|--------|------|
-| `twitter_search` | `query` (required), `sort` (Latest/Top), `limit`, `cursor` | $0.008 |
-| `twitter_tweet` | `ref` (tweet ID or URL), `include` (replies/quotes), `max_results` | $0.005 |
-| `twitter_user` | `ref` (username), `max_results`, `include_replies` | $0.005 |
+| `surf_twitter_search` | `query` (required), `sort` (Latest/Top), `limit`, `cursor` | $0.008 |
+| `surf_twitter_tweet` | `ref` (tweet ID or URL), `include` (replies/quotes), `max_results` | $0.005 |
+| `surf_twitter_user` | `ref` (username), `max_results`, `include_replies` | $0.005 |
 
-These are composite tools - `twitter_tweet` returns tweet + thread + parent in one call, `twitter_user` returns profile + recent tweets. Use the REST endpoints below for granular access at lower per-request cost.
+These are composite tools - `surf_twitter_tweet` returns tweet + thread + parent in one call, `surf_twitter_user` returns profile + recent tweets. Use the REST endpoints below for granular access at lower per-request cost.
 
 Free resource: `docs://search-operators` - full operator reference for search queries.
 
