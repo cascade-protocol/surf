@@ -15,6 +15,7 @@ OpenAI-compatible chat completion endpoint. One route: `POST /v1/chat/completion
 | `anthropic/claude-opus-4.6` | from $0.17 | Dynamic pricing - varies by token usage (base: 4096 max_tokens) |
 | `z-ai/glm-5` | from $0.030 | Dynamic pricing - strongest open-weight coding/agent model, 200K context, reasoning mode |
 | `minimax/minimax-m2.7` | from $0.012 | Dynamic pricing - MoE (230B/10B active), strong coding and agentic workflows, 200K context, reasoning mode |
+| `x-ai/grok-4.1-fast` | from $0.007 | Dynamic pricing - best-in-class tool calling, 2M context, agentic workflows, ~155 tok/s |
 | `moonshotai/kimi-k2.5` | $0.004 | Strong reasoning, code, long context |
 | `minimax/minimax-m2.5` | $0.003 | Fast general-purpose |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Lightweight, fast, cheap utility tier |

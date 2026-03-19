@@ -117,6 +117,7 @@ Each tool call costs the same as its REST equivalent but wrapped as MCP tools fo
 | `anthropic/claude-opus-4.6` | from $0.17 | Dynamic - varies by token usage |
 | `z-ai/glm-5` | from $0.030 | Dynamic - strongest open-weight coding/agent model |
 | `minimax/minimax-m2.7` | from $0.012 | Dynamic - MoE 230B/10B active, strong coding/agents |
+| `x-ai/grok-4.1-fast` | from $0.007 | Dynamic - best-in-class tool calling, 2M context, agentic workflows |
 | `moonshotai/kimi-k2.5` | $0.004 | Flat per-request |
 | `minimax/minimax-m2.5` | $0.003 | Flat per-request |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Flat per-request |

@@ -8,7 +8,7 @@ Live at [surf.cascade.fyi](https://surf.cascade.fyi)
 
 | Service | Domain | Price | Networks |
 |---------|--------|-------|----------|
-| **Inference** - LLM chat completions (GLM-5, Claude, Kimi K2.5, MiniMax M2.5, Qwen 2.5 7B) | `inference.surf.cascade.fyi` | $0.001-0.23 | Solana, Base |
+| **Inference** - LLM chat completions (GLM-5, Claude, Grok 4.1 Fast, Kimi K2.5, MiniMax M2.5, Qwen 2.5 7B) | `inference.surf.cascade.fyi` | $0.001-0.23 | Solana, Base |
 | **Twitter** - Search tweets, fetch users and tweets | `twitter.surf.cascade.fyi` | $0.001-0.005 | Solana, Base |
 | **Reddit** - Search posts, subreddits, users, comments | `reddit.surf.cascade.fyi` | $0.001-0.005 | Solana, Base |
 | **Web** - Crawl pages, search via Exa | `web.surf.cascade.fyi` | $0.005-0.01 | Solana, Base |

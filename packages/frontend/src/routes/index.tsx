@@ -33,6 +33,7 @@ const SERVICES = [
       { label: "claude-opus-4.6", price: "$0.17", dynamic: true },
       { label: "glm-5", price: "$0.030", dynamic: true },
       { label: "minimax-m2.7", price: "$0.012", dynamic: true },
+      { label: "grok-4.1-fast", price: "$0.007", dynamic: true },
       { label: "kimi-k2.5", price: "$0.004" },
       { label: "minimax-m2.5", price: "$0.003" },
       { label: "qwen-2.5-7b", price: "$0.001" },
