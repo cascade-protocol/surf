@@ -16,6 +16,11 @@ OpenAI-compatible chat completion endpoint. One route: `POST /v1/chat/completion
 | `z-ai/glm-5` | from $0.030 | Dynamic pricing - strongest open-weight coding/agent model, 200K context, reasoning mode |
 | `minimax/minimax-m2.7` | from $0.012 | Dynamic pricing - MoE (230B/10B active), strong coding and agentic workflows, 200K context, reasoning mode |
 | `x-ai/grok-4.1-fast` | from $0.007 | Dynamic pricing - best-in-class tool calling, 2M context, agentic workflows, ~155 tok/s |
+| `x-ai/grok-4.20-beta` | from $0.032 | Dynamic pricing - xAI flagship, lowest hallucination rate, strict prompt adherence, 2M context |
+| `x-ai/grok-4.20-multi-agent-beta` | from $0.064 | Dynamic pricing - multi-agent variant (4-16 parallel agents), deep research and tool coordination |
+| `x-ai/grok-4.1-fast:online` | from $0.007 | Dynamic pricing - grok-4.1-fast with live X/Twitter + web search via xAI native tools |
+| `x-ai/grok-4.20-beta:online` | from $0.037 | Dynamic pricing - grok-4.20-beta with live X/Twitter + web search |
+| `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | Dynamic pricing - multi-agent with live X/Twitter + web search |
 | `moonshotai/kimi-k2.5` | $0.004 | Strong reasoning, code, long context |
 | `minimax/minimax-m2.5` | $0.003 | Fast general-purpose |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Lightweight, fast, cheap utility tier |

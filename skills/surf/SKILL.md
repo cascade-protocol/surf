@@ -118,6 +118,11 @@ Each tool call costs the same as its REST equivalent but wrapped as MCP tools fo
 | `z-ai/glm-5` | from $0.030 | Dynamic - strongest open-weight coding/agent model |
 | `minimax/minimax-m2.7` | from $0.012 | Dynamic - MoE 230B/10B active, strong coding/agents |
 | `x-ai/grok-4.1-fast` | from $0.007 | Dynamic - best-in-class tool calling, 2M context, agentic workflows |
+| `x-ai/grok-4.20-beta` | from $0.032 | Dynamic - xAI flagship, lowest hallucination rate, 2M context |
+| `x-ai/grok-4.20-multi-agent-beta` | from $0.064 | Dynamic - multi-agent (4-16 parallel agents), deep research |
+| `x-ai/grok-4.1-fast:online` | from $0.007 | Dynamic - grok-4.1-fast + live X/Twitter & web search |
+| `x-ai/grok-4.20-beta:online` | from $0.037 | Dynamic - grok-4.20-beta + live X/Twitter & web search |
+| `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | Dynamic - multi-agent + live X/Twitter & web search |
 | `moonshotai/kimi-k2.5` | $0.004 | Flat per-request |
 | `minimax/minimax-m2.5` | $0.003 | Flat per-request |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Flat per-request |
