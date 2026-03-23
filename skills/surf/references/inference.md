@@ -22,7 +22,7 @@ OpenAI-compatible chat completion endpoint. One route: `POST /v1/chat/completion
 | `x-ai/grok-4.20-beta:online` | from $0.037 | Dynamic pricing - grok-4.20-beta with live X/Twitter + web search |
 | `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | Dynamic pricing - multi-agent with live X/Twitter + web search |
 | `moonshotai/kimi-k2.5` | $0.004 | Strong reasoning, code, long context |
-| `minimax/minimax-m2.5` | $0.003 | Fast general-purpose |
+| `minimax/minimax-m2.5` | from $0.006 | Dynamic pricing - fast general-purpose, 196K context |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Lightweight, fast, cheap utility tier |
 
 ## Chat completion

@@ -124,7 +124,7 @@ Each tool call costs the same as its REST equivalent but wrapped as MCP tools fo
 | `x-ai/grok-4.20-beta:online` | from $0.037 | Dynamic - grok-4.20-beta + live X/Twitter & web search |
 | `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | Dynamic - multi-agent + live X/Twitter & web search |
 | `moonshotai/kimi-k2.5` | $0.004 | Flat per-request |
-| `minimax/minimax-m2.5` | $0.003 | Flat per-request |
+| `minimax/minimax-m2.5` | from $0.006 | Dynamic - fast general-purpose, 196K context |
 | `qwen/qwen-2.5-7b-instruct` | $0.001 | Flat per-request |
 
 ### Web

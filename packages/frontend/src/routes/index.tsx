@@ -35,7 +35,7 @@ const SERVICES = [
       { label: "minimax-m2.7", price: "$0.012", dynamic: true },
       { label: "grok-4.1-fast", price: "$0.007", dynamic: true },
       { label: "kimi-k2.5", price: "$0.004" },
-      { label: "minimax-m2.5", price: "$0.003" },
+      { label: "minimax-m2.5", price: "$0.006", dynamic: true },
       { label: "qwen-2.5-7b", price: "$0.001" },
     ],
     networks: ["Solana", "Base"],
