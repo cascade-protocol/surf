@@ -12,7 +12,7 @@ Four APIs, one wallet. No API keys, no subscriptions.
 | Twitter | `twitter.surf.cascade.fyi` | $0.001 - $0.005/req |
 | Reddit | `reddit.surf.cascade.fyi` | $0.001 - $0.005/req |
 | Inference | `inference.surf.cascade.fyi` | $0.001 - $0.17/req |
-| Web | `web.surf.cascade.fyi` | $0.005 - $0.01/req |
+| Web | `web.surf.cascade.fyi` | $0.002 - $0.01/req |
 
 Payments in USDC on Solana or Base. Choose either chain.
 
@@ -36,7 +36,7 @@ npx x402-proxy --method POST \
 # Search Reddit ($0.005)
 npx x402-proxy "https://reddit.surf.cascade.fyi/search?q=x402+protocol"
 
-# Crawl a webpage ($0.005)
+# Crawl a webpage ($0.002)
 npx x402-proxy --method POST \
   --header "Content-Type: application/json" \
   --body '{"url":"https://example.com"}' \
@@ -84,7 +84,7 @@ claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp
 | Tool | Cost | What it does |
 |------|------|--------------|
 | `surf_web_search` | $0.01 | Semantic web search via Exa |
-| `surf_web_crawl` | $0.005 | Extract web page content as markdown/HTML/text |
+| `surf_web_crawl` | $0.002 | Extract web page content as markdown/HTML/text |
 
 Each tool call costs the same as its REST equivalent but wrapped as MCP tools for direct agent use.
 
@@ -131,7 +131,7 @@ Each tool call costs the same as its REST equivalent but wrapped as MCP tools fo
 
 | Endpoint | Cost |
 |----------|------|
-| Crawl (per request) | $0.005 |
+| Crawl (per request) | $0.002 |
 | Search | $0.01 |
 
 ### Cost example

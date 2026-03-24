@@ -26,7 +26,7 @@ Setup wallet first (one-time): `npx x402-proxy`
 | Tool | Params | Cost |
 |------|--------|------|
 | `surf_web_search` | `query` (required), `num_results` | $0.01 |
-| `surf_web_crawl` | `url` (required), `format`, `selector`, `proxy` | $0.005 |
+| `surf_web_crawl` | `url` (required), `format`, `selector`, `proxy` | $0.002 |
 
 ## Crawl
 
@@ -69,7 +69,7 @@ const result = await res.json();
 | `selector` | string | no | CSS selector to extract specific elements |
 | `proxy` | boolean | no | Use proxy for blocked sites |
 
-**Cost:** $0.005 per request
+**Cost:** $0.002 per request
 
 ## Search
 
