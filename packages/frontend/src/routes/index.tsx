@@ -80,7 +80,7 @@ const SERVICES = [
       { method: "POST", path: "/v1/search" },
     ],
     pricing: [
-      { label: "Crawl", price: "$0.005" },
+      { label: "Crawl", price: "$0.002" },
       { label: "Search", price: "$0.01" },
     ],
     networks: ["Solana", "Base"],
@@ -181,7 +181,7 @@ const REDDIT_MCP_TOOLS = [
 
 const WEB_MCP_TOOLS = [
   { name: "surf_web_search", desc: "Semantic web search", price: "$0.01" },
-  { name: "surf_web_crawl", desc: "Extract page content", price: "$0.005" },
+  { name: "surf_web_crawl", desc: "Extract page content", price: "$0.002" },
 ] as const;
 
 const RESPONSE_EXAMPLE = `// GET /users/cascade_fyi  ($0.001)
@@ -224,7 +224,7 @@ const summary = await x402Fetch("https://inference.surf.cascade.fyi/v1/chat/comp
     messages: [{ role: "user", content: \`Summarize: \${(await page.json()).content}\` }],
   }),
 });
-// Total cost: $0.001 + $0.004 + $0.005 + $0.004 = $0.014`;
+// Total cost: $0.001 + $0.004 + $0.002 + $0.004 = $0.011`;
 
 const FAQ_ITEMS = [
   {
@@ -256,7 +256,7 @@ const FAQ_ITEMS = [
 const COST_EXAMPLES = [
   {
     title: "Research 20 outreach targets",
-    total: "$0.27",
+    total: "$0.26",
     calls: "70 API calls",
     breakdown: "5 searches + 20 profiles + 20 timelines + 5 page crawls + 20 LLM calls",
   },
@@ -668,7 +668,7 @@ function WorkflowExample() {
         Four services, one flow
       </h2>
       <p className="mb-4 text-sm text-muted-foreground">
-        Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.014.
+        Profile lookup, page crawl, and AI summary in 15 lines. Total cost: $0.011.
       </p>
       <CodeBlock code={WORKFLOW_EXAMPLE} header="workflow.ts" />
     </section>
