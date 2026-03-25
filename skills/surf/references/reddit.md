@@ -10,13 +10,13 @@ OpenAPI spec: `https://reddit.surf.cascade.fyi/openapi.json`
 Reddit is also available as an MCP server with 3 composite tools. Add to Claude Code:
 
 ```bash
-claude mcp add -s user reddit -- npx x402-proxy https://reddit.surf.cascade.fyi/mcp
+claude mcp add -s user reddit -- npx x402-proxy mcp https://reddit.surf.cascade.fyi/mcp
 ```
 
 Or start the MCP server for any client:
 
 ```bash
-npx x402-proxy https://reddit.surf.cascade.fyi/mcp
+npx x402-proxy mcp https://reddit.surf.cascade.fyi/mcp
 ```
 
 Setup wallet first (one-time): `npx x402-proxy`

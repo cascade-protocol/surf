@@ -10,13 +10,13 @@ Two POST endpoints: crawl web pages and search the web. Also available as an MCP
 Web is also available as an MCP server with 2 tools. Add to Claude Code:
 
 ```bash
-claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp
+claude mcp add -s user web -- npx x402-proxy mcp https://web.surf.cascade.fyi/mcp
 ```
 
 Or start the MCP server for any client:
 
 ```bash
-npx x402-proxy https://web.surf.cascade.fyi/mcp
+npx x402-proxy mcp https://web.surf.cascade.fyi/mcp
 ```
 
 Setup wallet first (one-time): `npx x402-proxy`

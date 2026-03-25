@@ -249,7 +249,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What are the MCP servers?",
-    a: "Twitter, Reddit, and Web are all available as MCP servers. Each exposes tools that wrap the REST endpoints for direct agent use. Add them to Claude Code with: claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp",
+    a: "Twitter, Reddit, and Web are all available as MCP servers. Each exposes tools that wrap the REST endpoints for direct agent use. Add them to Claude Code with: claude mcp add -s user twitter -- npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp",
   },
 ] as const;
 
@@ -702,9 +702,9 @@ const mcpInstallExample = `# Setup wallet (first time only)
 npx x402-proxy
 
 # Add MCP servers to Claude Code
-claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
-claude mcp add -s user reddit -- npx x402-proxy https://reddit.surf.cascade.fyi/mcp
-claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp`;
+claude mcp add -s user twitter -- npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp
+claude mcp add -s user reddit -- npx x402-proxy mcp https://reddit.surf.cascade.fyi/mcp
+claude mcp add -s user web -- npx x402-proxy mcp https://web.surf.cascade.fyi/mcp`;
 
 const tryItExample = "npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi";
 

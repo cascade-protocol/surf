@@ -11,13 +11,13 @@ OpenAPI spec: `https://twitter.surf.cascade.fyi/openapi.json`
 Twitter is also available as an MCP server with 3 composite tools. Add to Claude Code:
 
 ```bash
-claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+claude mcp add -s user twitter -- npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp
 ```
 
 Or start the MCP server for any client:
 
 ```bash
-npx x402-proxy https://twitter.surf.cascade.fyi/mcp
+npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp
 ```
 
 Setup wallet first (one-time): `npx x402-proxy`

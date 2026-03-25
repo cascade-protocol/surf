@@ -58,9 +58,9 @@ npx x402-proxy
 Add to Claude Code:
 
 ```bash
-claude mcp add -s user twitter -- npx x402-proxy https://twitter.surf.cascade.fyi/mcp
-claude mcp add -s user reddit -- npx x402-proxy https://reddit.surf.cascade.fyi/mcp
-claude mcp add -s user web -- npx x402-proxy https://web.surf.cascade.fyi/mcp
+claude mcp add -s user twitter -- npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp
+claude mcp add -s user reddit -- npx x402-proxy mcp https://reddit.surf.cascade.fyi/mcp
+claude mcp add -s user web -- npx x402-proxy mcp https://web.surf.cascade.fyi/mcp
 ```
 
 ### Twitter MCP Tools
