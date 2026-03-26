@@ -1,6 +1,6 @@
 ---
 name: surf
-version: "2.0.0"
+version: "2.1.0"
 description: "Build with Surf pay-per-use APIs at surf.cascade.fyi. Twitter data, Reddit data, web search/crawl, and LLM inference - no signup, no API keys, just pay per call. Use when working with Surf endpoints, fetching Twitter/X data, Reddit data, web crawling/search, pay-per-request LLM inference, setting up x402-proxy or @x402/fetch with Surf, or any mention of surf.cascade.fyi. Triggers on surf, surf.cascade.fyi, surf API, twitter data, reddit data, web crawl, surf inference, x402 endpoints, MCP surf tools."
 ---
 
@@ -69,7 +69,7 @@ npx x402-proxy mcp add surf "https://surf.cascade.fyi/mcp?tools=surf_twitter_sea
 
 All data endpoints support both `POST` (JSON body) and `GET` (path/query params). OpenAPI spec at `https://surf.cascade.fyi/openapi.json`.
 
-GET convenience routes: `/api/v1/twitter/user/:ref`, `/api/v1/twitter/tweet/:ref`, `/api/v1/reddit/post/:ref`, `/api/v1/reddit/subreddit/:name`, `/api/v1/reddit/user/:ref`
+GET convenience routes: `/api/v1/twitter/search/:query`, `/api/v1/twitter/tweet/:ref`, `/api/v1/twitter/user/:ref`, `/api/v1/reddit/search/:query`, `/api/v1/reddit/post/:ref`, `/api/v1/reddit/subreddit/:name`, `/api/v1/reddit/user/:ref`, `/api/v1/web/search/:query`, `/api/v1/web/crawl/:url`
 
 ### Twitter
 
