@@ -1,146 +1,267 @@
 ---
 name: surf
-description: Build with Surf pay-per-use APIs - Twitter data, Reddit data, LLM inference, and web scraping at surf.cascade.fyi. Use this skill whenever working with Surf endpoints, Twitter/X data extraction, Reddit data, web crawling/search, or pay-per-request LLM inference. Also use when setting up @x402/fetch for Surf services, using x402-proxy with Surf URLs, or any mention of twitter.surf, reddit.surf, inference.surf, or web.surf domains. Even if the user just says "get tweets", "search reddit", or "crawl a page" and Surf is in the project context, use this skill.
+version: "2.0.0"
+description: "Build with Surf pay-per-use APIs at surf.cascade.fyi. Twitter data, Reddit data, web search/crawl, and LLM inference - no signup, no API keys, just pay per call. Use when working with Surf endpoints, fetching Twitter/X data, Reddit data, web crawling/search, pay-per-request LLM inference, setting up x402-proxy or @x402/fetch with Surf, or any mention of surf.cascade.fyi. Triggers on surf, surf.cascade.fyi, surf API, twitter data, reddit data, web crawl, surf inference, x402 endpoints, MCP surf tools."
 ---
 
 # Surf APIs
 
-Four APIs, one wallet. No API keys, no subscriptions.
+Unified pay-per-use API at `surf.cascade.fyi`. No signup, no API keys - just pay per call.
 
-| Service | Base URL | Price range |
-|---------|----------|-------------|
-| Twitter | `twitter.surf.cascade.fyi` | $0.001 - $0.005/req |
-| Reddit | `reddit.surf.cascade.fyi` | $0.001 - $0.005/req |
-| Inference | `inference.surf.cascade.fyi` | $0.001 - $0.17/req |
-| Web | `web.surf.cascade.fyi` | $0.002 - $0.01/req |
+10 composite REST endpoints + 9 MCP tools. Payments in USDC on Solana, Base, or Tempo (MPP).
 
-Payments in USDC on Solana or Base. Choose either chain.
+| Surface | Endpoints | Price |
+|---------|-----------|-------|
+| Twitter | search, tweet, user | $0.005/call |
+| Reddit | search, post, subreddit, user | $0.005/call |
+| Web | search | $0.01/call |
+| Web | crawl | $0.002/call |
+| Inference | 15 models | $0.001 - dynamic |
 
 ## Try it
 
-Test any endpoint with [x402-proxy](https://github.com/cascade-protocol/x402-proxy) - no code, no wallet setup:
+Test any endpoint with [x402-proxy](https://github.com/cascade-protocol/x402-proxy):
 
 ```bash
-# Fetch a Twitter profile ($0.001)
-npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi
-
-# Get recent tweets ($0.004)
-npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi/tweets
-
-# Chat with Kimi K2.5 ($0.004)
-npx x402-proxy --method POST \
-  --header "Content-Type: application/json" \
-  --body '{"model":"moonshotai/kimi-k2.5","messages":[{"role":"user","content":"Hello"}]}' \
-  https://inference.surf.cascade.fyi/v1/chat/completions
+# Twitter user profile + recent tweets ($0.005)
+npx x402-proxy https://surf.cascade.fyi/api/v1/twitter/user/cascade_fyi
 
 # Search Reddit ($0.005)
-npx x402-proxy "https://reddit.surf.cascade.fyi/search?q=x402+protocol"
+npx x402-proxy -X POST -H "Content-Type: application/json" \
+  -d '{"query":"x402 protocol"}' \
+  https://surf.cascade.fyi/api/v1/reddit/search
 
-# Crawl a webpage ($0.002)
-npx x402-proxy --method POST \
-  --header "Content-Type: application/json" \
-  --body '{"url":"https://example.com"}' \
-  https://web.surf.cascade.fyi/v1/crawl
+# Chat with Kimi K2.5 ($0.004)
+npx x402-proxy -X POST -H "Content-Type: application/json" \
+  -d '{"model":"moonshotai/kimi-k2.5","messages":[{"role":"user","content":"Hello"}]}' \
+  https://surf.cascade.fyi/api/v1/inference/completions
+
+# Web search ($0.01)
+npx x402-proxy -X POST -H "Content-Type: application/json" \
+  -d '{"query":"x402 protocol"}' \
+  https://surf.cascade.fyi/api/v1/web/search
+
+# Crawl a page ($0.002)
+npx x402-proxy -X POST -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}' \
+  https://surf.cascade.fyi/api/v1/web/crawl
 ```
 
 First run walks you through wallet setup automatically.
 
-## MCP Servers
+## MCP Server
 
-Twitter and Reddit are available as MCP servers with composite tools that bundle multiple API calls into single tool invocations.
-
-Setup wallet (first time only):
-
-```bash
-npx x402-proxy
-```
+Unified MCP server at `/mcp` with 9 tools. Supports tool filtering via `?tools=` query param.
 
 Add to Claude Code:
 
 ```bash
-claude mcp add -s user twitter -- npx x402-proxy mcp https://twitter.surf.cascade.fyi/mcp
-claude mcp add -s user reddit -- npx x402-proxy mcp https://reddit.surf.cascade.fyi/mcp
-claude mcp add -s user web -- npx x402-proxy mcp https://web.surf.cascade.fyi/mcp
+npx x402-proxy mcp add surf https://surf.cascade.fyi/mcp
 ```
 
-### Twitter MCP Tools
+Or add a filtered subset:
 
-| Tool | Cost | What it bundles |
-|------|------|-----------------|
-| `surf_twitter_search` | $0.008 | Advanced search with 50+ operators, enriched results with engagement summary |
-| `surf_twitter_tweet` | $0.005 | Tweet + thread context + parent (if reply). Optionally include replies/quotes |
-| `surf_twitter_user` | $0.005 | User profile + recent tweets timeline |
+```bash
+npx x402-proxy mcp add surf "https://surf.cascade.fyi/mcp?tools=surf_twitter_search,surf_web_crawl"
+```
 
-### Reddit MCP Tools
+## Endpoint Reference
 
-| Tool | Cost | What it bundles |
-|------|------|-----------------|
-| `reddit_search` | $0.008 | Search posts across Reddit with sort/time filters |
-| `reddit_post` | $0.005 | Post + comments with depth/sort control |
-| `reddit_subreddit` | $0.005 | Subreddit info + top posts |
+All data endpoints support both `POST` (JSON body) and `GET` (path/query params). OpenAPI spec at `https://surf.cascade.fyi/openapi.json`.
 
-### Web MCP Tools
+GET convenience routes: `/api/v1/twitter/user/:ref`, `/api/v1/twitter/tweet/:ref`, `/api/v1/reddit/post/:ref`, `/api/v1/reddit/subreddit/:name`, `/api/v1/reddit/user/:ref`
 
-| Tool | Cost | What it does |
-|------|------|--------------|
-| `surf_web_search` | $0.01 | Semantic web search via Exa |
-| `surf_web_crawl` | $0.002 | Extract web page content as markdown/HTML/text |
+### Twitter
 
-Each tool call costs the same as its REST equivalent but wrapped as MCP tools for direct agent use.
+All $0.005/call. MCP tools use the same params and return the same data.
 
-## Pricing
+**POST /api/v1/twitter/search** | MCP: `surf_twitter_search`
 
-### Reddit (7 endpoints)
+Search tweets with 50+ advanced operators. Returns ~20 tweets per page with engagement summary.
 
-| Tier | Cost | Endpoints |
-|------|------|-----------|
-| Lookup | $0.001 | Subreddit info, user profile |
-| Listing | $0.003 | Subreddit posts |
-| Content | $0.004 | Post with comments, user posts, user comments |
-| Search | $0.005 | Search across Reddit |
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `query` | string | yes | | Search query (e.g. `from:elonmusk AI min_faves:100`) |
+| `sort` | `Latest` \| `Top` | no | `Latest` | Sort order |
+| `cursor` | string | no | | Pagination cursor |
+| `start_date` | `YYYY-MM-DD` | no | | Only tweets on or after this date |
+| `end_date` | `YYYY-MM-DD` | no | | Only tweets before this date |
 
-### Twitter (26 endpoints)
+Search operators: `from:user`, `to:user`, `min_faves:N`, `min_retweets:N`, `filter:media`, `since:YYYY-MM-DD`, `until:YYYY-MM-DD`, `lang:en`, `within_time:7d`
 
-| Tier | Cost | Endpoints |
-|------|------|-----------|
-| Lookup | $0.001 | Single tweet, user profile, relationship check, trends, spaces |
-| Paginated | $0.004 | Timelines, followers, user search, replies, lists, communities |
-| Search | $0.005 | Tweet search with advanced operators, article content |
+**POST /api/v1/twitter/tweet** | MCP: `surf_twitter_tweet`
+
+Fetch a tweet with full thread context (all conversation participants), parent tweet, and optionally replies/quotes.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `ref` | string | yes | | Tweet ID or URL |
+| `include` | array | no | | `["replies"]`, `["quotes"]`, or both |
+
+**POST /api/v1/twitter/user** | MCP: `surf_twitter_user`
+
+Fetch user profile with ~20 recent tweets per page.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `ref` | string | yes | | Username or @username |
+| `include_replies` | boolean | no | `false` | Include replies in timeline |
+| `include_mentions` | boolean | no | `false` | Include mentions timeline |
+| `cursor` | string | no | | Pagination cursor |
+
+**Enriched fields:** thread context (full conversation up to 20 tweets), engagement_rate, content_type (original/reply/quote/retweet/media/link_share), topic extraction (hashtags, domains, mentions), auto-crawled article content from URLs in tweets, verified_type.
+
+### Reddit
+
+All $0.005/call. MCP tools use the same params and return the same data.
+
+**POST /api/v1/reddit/search** | MCP: `surf_reddit_search`
+
+Search posts across Reddit with sort and time filters.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `query` | string | yes | | Search query |
+| `sort` | `relevance` \| `hot` \| `top` \| `new` \| `comments` | no | `relevance` | Sort order |
+| `time` | `hour` \| `day` \| `week` \| `month` \| `year` \| `all` | no | `all` | Time range |
+| `limit` | integer | no | `25` | Max results (1-100) |
+| `cursor` | string | no | | Pagination cursor |
+| `start_date` | `YYYY-MM-DD` | no | | Only posts on or after this date |
+| `end_date` | `YYYY-MM-DD` | no | | Only posts before this date |
+
+**POST /api/v1/reddit/post** | MCP: `surf_reddit_post`
+
+Fetch a post with comments, depth/sort control.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `ref` | string | yes | | Post ID or Reddit URL |
+| `comment_sort` | `confidence` \| `top` \| `new` \| `controversial` \| `old` \| `qa` | no | `confidence` | Comment sort |
+| `comment_limit` | integer | no | `50` | Max comments (0-200) |
+| `comment_depth` | integer | no | `5` | Max nesting depth (0-10) |
+
+**POST /api/v1/reddit/subreddit** | MCP: `surf_reddit_subreddit`
+
+Fetch subreddit info and top posts.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `name` | string | yes | | Subreddit name (e.g. `programming`) |
+| `sort` | `hot` \| `new` \| `top` \| `rising` | no | `hot` | Post sort |
+| `time` | `hour` \| `day` \| `week` \| `month` \| `year` \| `all` | no | `day` | Time range |
+| `limit` | integer | no | `25` | Max posts (1-100) |
+
+**POST /api/v1/reddit/user** | MCP: `surf_reddit_user`
+
+Fetch a user profile with recent posts and comments.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `ref` | string | yes | | Reddit username (e.g. `spez`) |
+| `include_posts` | boolean | no | `true` | Include recent posts |
+| `include_comments` | boolean | no | `false` | Include recent comments |
+| `max_results` | integer | no | `25` | Max posts/comments (1-100) |
+
+**Enriched fields:** domain, stickied, locked, edited, distinguished, awards, crosspost_parent, comment link context.
+
+### Web
+
+**POST /api/v1/web/search** | MCP: `surf_web_search` | $0.01/call
+
+Semantic web search powered by Exa. Returns titles, URLs, snippets, and highlights.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `query` | string | yes | | Search query |
+| `type` | `auto` \| `fast` | no | `auto` | Search depth |
+| `include_domains` | string[] | no | | Restrict to specific domains |
+| `exclude_domains` | string[] | no | | Exclude specific domains |
+| `start_published_date` | ISO string | no | | Only results published after this date |
+| `end_published_date` | ISO string | no | | Only results published before this date |
+| `category` | enum | no | | `company`, `research paper`, `news`, `pdf`, `github`, `tweet`, `personal site`, `linkedin profile` |
+
+**POST /api/v1/web/crawl** | MCP: `surf_web_crawl` | $0.002/call
+
+Extract content from web pages as markdown, HTML, or text. Supports PDF extraction.
+
+| Param | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `url` | string | one of url/urls | | Single URL to crawl |
+| `urls` | string[] | one of url/urls | | Multiple URLs (max 20, one payment covers all) |
+| `format` | `markdown` \| `html` \| `text` | no | `markdown` | Output format |
+| `selector` | string | no | | CSS selector for targeted extraction |
+| `proxy` | boolean | no | | Use proxy for blocked sites |
+
+**Enriched fields (search):** published_date, author, score, query-relevant highlights, autoprompt query rewriting.
 
 ### Inference
 
-| Model | Cost | Notes |
-|-------|------|-------|
+**POST /api/v1/inference/completions** | OpenAI-compatible chat completion
+
+Model list at `GET /api/v1/inference/models`.
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `model` | string | yes | Model identifier (see table below) |
+| `messages` | array | yes | Chat messages with `role` and `content` |
+| `stream` | boolean | no | Enable SSE streaming |
+| `max_tokens` | integer | no | Max tokens to generate (affects dynamic pricing) |
+| `max_completion_tokens` | integer | no | Preferred over max_tokens for Anthropic models |
+| `temperature` | number | no | Sampling temperature (0-2) |
+| `top_p` | number | no | Nucleus sampling |
+| `tools` | array | no | Tool/function definitions |
+
+**Models (15):**
+
+| Model | Price | Notes |
+|-------|-------|-------|
+| `qwen/qwen-2.5-7b-instruct` | $0.001 flat | Lightweight, fast utility |
+| `moonshotai/kimi-k2.5` | $0.004 flat | Strong reasoning, code, long context |
+| `minimax/minimax-m2.5` | from $0.006 | Dynamic - fast general-purpose, 196K context |
+| `x-ai/grok-4.1-fast` | from $0.007 | Dynamic - best-in-class tool calling, 2M context |
+| `minimax/minimax-m2.7` | from $0.012 | Dynamic - MoE 230B/10B active, strong coding |
+| `z-ai/glm-5` | from $0.030 | Dynamic - strongest open-weight coding model |
+| `x-ai/grok-4.20-beta` | from $0.032 | Dynamic - xAI flagship, lowest hallucination rate |
+| `x-ai/grok-4.20-multi-agent-beta` | from $0.064 | Dynamic - multi-agent (4-16 parallel agents) |
 | `anthropic/claude-sonnet-4.5` | from $0.10 | Dynamic - varies by token usage |
 | `anthropic/claude-sonnet-4.6` | from $0.10 | Dynamic - varies by token usage |
 | `anthropic/claude-opus-4.5` | from $0.17 | Dynamic - varies by token usage |
 | `anthropic/claude-opus-4.6` | from $0.17 | Dynamic - varies by token usage |
-| `z-ai/glm-5` | from $0.030 | Dynamic - strongest open-weight coding/agent model |
-| `minimax/minimax-m2.7` | from $0.012 | Dynamic - MoE 230B/10B active, strong coding/agents |
-| `x-ai/grok-4.1-fast` | from $0.007 | Dynamic - best-in-class tool calling, 2M context, agentic workflows |
-| `x-ai/grok-4.20-beta` | from $0.032 | Dynamic - xAI flagship, lowest hallucination rate, 2M context |
-| `x-ai/grok-4.20-multi-agent-beta` | from $0.064 | Dynamic - multi-agent (4-16 parallel agents), deep research |
-| `x-ai/grok-4.1-fast:online` | from $0.007 | Dynamic - grok-4.1-fast + live X/Twitter & web search |
-| `x-ai/grok-4.20-beta:online` | from $0.037 | Dynamic - grok-4.20-beta + live X/Twitter & web search |
-| `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | Dynamic - multi-agent + live X/Twitter & web search |
-| `moonshotai/kimi-k2.5` | $0.004 | Flat per-request |
-| `minimax/minimax-m2.5` | from $0.006 | Dynamic - fast general-purpose, 196K context |
-| `qwen/qwen-2.5-7b-instruct` | $0.001 | Flat per-request |
+| `x-ai/grok-4.1-fast:online` | from $0.007 | grok-4.1-fast + live X/Twitter & web search |
+| `x-ai/grok-4.20-beta:online` | from $0.037 | grok-4.20-beta + live X/Twitter & web search |
+| `x-ai/grok-4.20-multi-agent-beta:online` | from $0.074 | multi-agent + live X/Twitter & web search |
 
-### Web
+Flat models charge a fixed price per request. Dynamic models price based on input size, max_tokens, and model rates. The `:online` variants include live X/Twitter + web search via xAI native tools.
 
-| Endpoint | Cost |
-|----------|------|
-| Crawl (per request) | $0.002 |
-| Search | $0.01 |
+**Streaming:** Set `stream: true` for SSE. Parse `data:` lines, stop on `data: [DONE]`.
 
-### Cost example
+```typescript
+const res = await fetchX402("https://surf.cascade.fyi/api/v1/inference/completions", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    model: "moonshotai/kimi-k2.5",
+    messages: [{ role: "user", content: "Write a haiku" }],
+    stream: true,
+  }),
+});
 
-An agent doing 1,000 Twitter lookups + 200 Reddit lookups + 100 tweet searches + 50 inference calls per day:
-- Twitter: 1,000 x $0.001 + 100 x $0.005 = $1.50
-- Reddit: 200 x $0.003 = $0.60
-- Inference: 50 x $0.004 = $0.20
-- **Total: $2.30/day**
+const reader = res.body!.getReader();
+const decoder = new TextDecoder();
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  const chunk = decoder.decode(value);
+  for (const line of chunk.split("\n")) {
+    if (line.startsWith("data: ") && line !== "data: [DONE]") {
+      const data = JSON.parse(line.slice(6));
+      process.stdout.write(data.choices[0]?.delta?.content ?? "");
+    }
+  }
+}
+```
+
+**Rate limits:** 20 requests per 60 seconds per wallet. Duplicate payment headers are rejected.
 
 ## Integrate with @x402/fetch
 
@@ -175,56 +296,45 @@ registerExactEvmScheme(client, { signer });
 const fetchX402 = wrapFetchWithPayment(fetch, client);
 ```
 
-Then call any Surf endpoint like a normal fetch:
+Then use like normal fetch:
 
 ```typescript
-// Twitter - user profile
-const res = await fetchX402("https://twitter.surf.cascade.fyi/users/cascade_fyi");
+const res = await fetchX402("https://surf.cascade.fyi/api/v1/twitter/user/cascade_fyi");
 const { data } = await res.json();
-
-// Inference - chat completion
-const chat = await fetchX402("https://inference.surf.cascade.fyi/v1/chat/completions", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    model: "moonshotai/kimi-k2.5",
-    messages: [{ role: "user", content: "Summarize x402 in one sentence" }],
-  }),
-});
-
-// Web - crawl a page
-const page = await fetchX402("https://web.surf.cascade.fyi/v1/crawl", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ url: "https://example.com" }),
-});
 ```
 
-## Debugging with x402-proxy
-
-Body streams to stdout, payment info to stderr - safe for piping:
+## Debugging
 
 ```bash
-npx x402-proxy https://twitter.surf.cascade.fyi/users/cascade_fyi | jq '.data'
-
+npx x402-proxy https://surf.cascade.fyi/api/v1/twitter/user/cascade_fyi | jq '.data'
 npx x402-proxy wallet            # addresses and balances
 npx x402-proxy wallet history    # payment log
 ```
 
-## OpenAPI specs
+## Pagination
 
-Each service serves its full OpenAPI spec:
+Paginated endpoints return `meta.has_next_page` and `meta.next_cursor`. Pass `cursor` in the next request:
 
-- `https://twitter.surf.cascade.fyi/openapi.json`
-- `https://reddit.surf.cascade.fyi/openapi.json`
-- `https://inference.surf.cascade.fyi/openapi.json`
-- `https://web.surf.cascade.fyi/openapi.json`
+```typescript
+let cursor: string | undefined;
+const allTweets = [];
 
-## Endpoint reference
+do {
+  const res = await fetchX402("https://surf.cascade.fyi/api/v1/twitter/user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: "cascade_fyi", cursor }),
+  });
+  const { data, meta } = await res.json();
+  allTweets.push(...data.tweets);
+  cursor = meta?.has_next_page ? meta.next_cursor : undefined;
+} while (cursor);
+```
 
-For full endpoint docs, request/response formats, and query parameters:
+## Tips
 
-- **Twitter** (26 endpoints) - read `references/twitter.md`
-- **Reddit** (7 endpoints) - read `references/reddit.md`
-- **Inference** (chat completions + streaming) - read `references/inference.md`
-- **Web** (crawl + search) - read `references/web.md`
+- Use `format: "markdown"` for LLM-friendly web crawl output
+- Batch URLs with the `urls` array to crawl multiple pages in one paid request
+- The inference API is OpenAI-compatible - existing code works by changing the base URL
+- Use `comment_limit: 0` to fetch a Reddit post without comments (faster)
+- Quote URLs containing `?` or `&` in shell commands to avoid glob expansion
