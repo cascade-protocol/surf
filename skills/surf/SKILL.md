@@ -109,7 +109,7 @@ Fetch user profile with ~20 recent tweets per page.
 | `include_mentions` | boolean | no | `false` | Include mentions timeline |
 | `cursor` | string | no | | Pagination cursor |
 
-**Enriched fields:** thread context (full conversation up to 20 tweets), engagement_rate, content_type (original/reply/quote/retweet/media/link_share), topic extraction (hashtags, domains, mentions), auto-crawled article content from URLs in tweets, verified_type.
+**Enriched fields:** thread context (full conversation up to 20 tweets), engagement_rate, content_type (original/reply/quote/retweet/media/link_share), topic extraction (hashtags, domains, mentions), auto-crawled article content from URLs in tweets.
 
 ### Reddit
 
