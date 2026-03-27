@@ -216,7 +216,7 @@ Model list at `GET /api/v1/inference/models`.
 | Model | Price | Notes |
 |-------|-------|-------|
 | `qwen/qwen-2.5-7b-instruct` | $0.001 flat | Lightweight, fast utility |
-| `moonshotai/kimi-k2.5` | $0.004 flat | Strong reasoning, code, long context |
+| `moonshotai/kimi-k2.5` | from $0.006 | Dynamic - strong reasoning, code, long context |
 | `minimax/minimax-m2.5` | from $0.006 | Dynamic - fast general-purpose, 196K context |
 | `x-ai/grok-4.1-fast` | from $0.007 | Dynamic - best-in-class tool calling, 2M context |
 | `minimax/minimax-m2.7` | from $0.012 | Dynamic - MoE 230B/10B active, strong coding |
